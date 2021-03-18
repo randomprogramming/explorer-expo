@@ -1,6 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Text, View } from "react-native";
+import { Platform, Text, StatusBar } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import {
   useFonts,
@@ -23,7 +22,9 @@ import {
   Poppins_900Black,
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
-import Typography from "./src/components/Typography";
+import MainRouter from "./src/routers/MainRouter";
+import Container from "./src/components/Container";
+import useTheme from "./src/hooks/useTheme";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -47,14 +48,11 @@ export default function App() {
     Poppins_900Black_Italic,
   });
 
+  const theme = useTheme();
+
   return (
-    <View style={{ flex: 1 }}>
-      <StatusBar backgroundColor="black" style="light" translucent={false} />
-      {fontsLoaded ? (
-        <Typography>Hello world!</Typography>
-      ) : (
-        <Text>Fonts not loaded!</Text>
-      )}
-    </View>
+    <Container>
+      {fontsLoaded ? <MainRouter /> : <Text>Fonts not loaded!</Text>}
+    </Container>
   );
 }

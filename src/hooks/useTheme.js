@@ -29,8 +29,8 @@ const LIGHT_MODE_COLORS = {
     // the name of the property is basically the Z index of the component
     // the higher the component is on the screen(z index), the higher background it uses
     primary: {
-      0: "#ECECEC",
-      1: "#B2B2B2",
+      0: "#FFFFFF",
+      1: "#F8F6F6",
     },
     secondary: {
       0: "#040404",
@@ -38,8 +38,8 @@ const LIGHT_MODE_COLORS = {
     },
   },
   text: {
-    primary: "#000",
-    secondary: "#000",
+    primary: "#080808",
+    secondary: "#F8F6F6",
   },
   // The accent objects are same in both dark mode and light mode
   accent: {
@@ -59,8 +59,8 @@ const useTheme = () => {
   const [isDarkModeActive, setIsDarkModeActive] = useState(false);
 
   return isDarkModeActive
-    ? { ...DARK_MODE_COLORS, common: COMMON, statusBarStyle: "light" }
-    : { ...LIGHT_MODE_COLORS, common: COMMON, statusBarStyle: "dark" };
+    ? { ...DARK_MODE_COLORS, common: COMMON, statusBarStyle: "light-content" }
+    : { ...LIGHT_MODE_COLORS, common: COMMON, statusBarStyle: "dark-content" };
 };
 
 export default useTheme;
