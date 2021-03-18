@@ -14,7 +14,6 @@ function WithWrapper() {
     <NavigationContainer>
       <Provider store={store}>
         <StatusBar
-          translucent
           barStyle={theme.statusBarStyle}
           backgroundColor={theme.background.primary[0]}
         />

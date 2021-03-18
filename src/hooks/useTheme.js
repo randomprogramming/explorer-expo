@@ -46,7 +46,7 @@ const COMMON = {
 };
 
 const ACCENT = {
-  primary: "#006D77",
+  primary: "#0F9E80",
   secondary: "#7A8CA9",
 };
 
