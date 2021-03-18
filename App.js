@@ -23,6 +23,7 @@ import {
   Poppins_900Black,
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
+import Typography from "./src/components/Typography";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -50,7 +51,7 @@ export default function App() {
     <View style={{ flex: 1 }}>
       <StatusBar backgroundColor="black" style="light" translucent={false} />
       {fontsLoaded ? (
-        <Text style={{ fontFamily: "Poppins_600SemiBold" }}>Loaded!</Text>
+        <Typography>Hello world!</Typography>
       ) : (
         <Text>Fonts not loaded!</Text>
       )}
