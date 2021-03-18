@@ -43,19 +43,19 @@ const Typography = ({
     if (variant) {
       switch (variant) {
         case "h1":
-          tmpStyle.push(styles.bold);
+          tmpStyle.push(styles.semiBold);
           tmpStyle.push(styles.h1);
           break;
         case "h2":
-          tmpStyle.push(styles.bold);
+          tmpStyle.push(styles.semiBold);
           tmpStyle.push(styles.h2);
           break;
         case "h3":
-          tmpStyle.push(styles.semiBold);
+          tmpStyle.push(styles.medium);
           tmpStyle.push(styles.h3);
           break;
         case "h4":
-          tmpStyle.push(styles.semiBold);
+          tmpStyle.push(styles.medium);
           tmpStyle.push(styles.h4);
           break;
         default:
@@ -103,8 +103,8 @@ export default Typography;
 Typography.propTypes = {
   fontWeight: PropTypes.oneOf(["regular", "medium", "semi-bold", "bold"]),
   color: PropTypes.oneOf(["primary", "secondary", "accent"]),
+  variant: PropTypes.oneOf(["h1", "h2", "h3", "h4"]),
   fontSize: PropTypes.number,
-  variant: PropTypes.string,
   onPress: PropTypes.func,
   style: Text.propTypes.style,
 };
@@ -123,13 +123,13 @@ const styles = StyleSheet.create({
     fontFamily: BOLD_FF,
   },
   h1: {
-    fontSize: 28,
+    fontSize: 30,
   },
   h2: {
-    fontSize: 24,
+    fontSize: 26,
   },
   h3: {
-    fontSize: 21,
+    fontSize: 22,
   },
   h4: {
     fontSize: 17,

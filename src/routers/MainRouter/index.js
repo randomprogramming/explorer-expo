@@ -9,10 +9,15 @@ import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
+import MapScreen from "../../screens/MapScreen";
+import AddLocationScreen from "../../screens/AddLocationScreen";
+import LikedLocationsScreen from "../../screens/LikedLocationsScreen";
+import SettingsScreen from "../../screens/SettingsScreen";
+import AddLocationRouter from "../AddLocationRouter";
 
 const Tab = createBottomTabNavigator();
 
-const ICON_SIZE = 25;
+const ICON_SIZE = 26;
 
 const MainRouter = () => {
   const theme = useTheme();
@@ -67,13 +72,16 @@ const MainRouter = () => {
       })}
     >
       <Tab.Screen name={names.DISCOVER_SCREEN} component={DiscoverScreen} />
-      <Tab.Screen name={names.MAP_SCREEN} component={DiscoverScreen} />
-      <Tab.Screen name={names.ADD_LOCATION_SCREEN} component={DiscoverScreen} />
+      <Tab.Screen name={names.MAP_SCREEN} component={MapScreen} />
+      <Tab.Screen
+        name={names.ADD_LOCATION_SCREEN}
+        component={AddLocationRouter}
+      />
       <Tab.Screen
         name={names.LIKED_LOCATIONS_SCREEN}
-        component={DiscoverScreen}
+        component={LikedLocationsScreen}
       />
-      <Tab.Screen name={names.SETTINGS_SCREEN} component={DiscoverScreen} />
+      <Tab.Screen name={names.SETTINGS_SCREEN} component={SettingsScreen} />
     </Tab.Navigator>
   );
 };
