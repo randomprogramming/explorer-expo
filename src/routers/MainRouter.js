@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { useSelector } from "react-redux";
+import NoAuthRouter from "./NoAuthRouter";
 
 const MainRouter = () => {
   const username = useSelector((state) => state.person.username);
@@ -16,7 +17,7 @@ const MainRouter = () => {
   return isLoggedIn() ? (
     <View style={{ height: 100, width: 100, backgroundColor: "green" }}></View>
   ) : (
-    <View style={{ height: 100, width: 100, backgroundColor: "red" }}></View>
+    <NoAuthRouter />
   );
 };
 

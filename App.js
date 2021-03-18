@@ -1,6 +1,5 @@
 import React from "react";
-import { Platform, Text, StatusBar } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { Text } from "react-native";
 import {
   useFonts,
   Poppins_100Thin,
@@ -24,7 +23,6 @@ import {
 } from "@expo-google-fonts/poppins";
 import MainRouter from "./src/routers/MainRouter";
 import Container from "./src/components/Container";
-import useTheme from "./src/hooks/useTheme";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -48,11 +46,11 @@ export default function App() {
     Poppins_900Black_Italic,
   });
 
-  const theme = useTheme();
-
   return (
     <Container>
-      {fontsLoaded ? <MainRouter /> : <Text>Fonts not loaded!</Text>}
+      {
+        fontsLoaded ? <MainRouter /> : <Text>Fonts not loaded!</Text> //TODO: replace this with a image screen or something
+      }
     </Container>
   );
 }

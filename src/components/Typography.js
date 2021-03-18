@@ -100,6 +100,15 @@ const Typography = ({
 
 export default Typography;
 
+Typography.propTypes = {
+  fontWeight: PropTypes.oneOf(["regular", "medium", "semi-bold", "bold"]),
+  color: PropTypes.oneOf(["primary", "secondary", "accent"]),
+  fontSize: PropTypes.number,
+  variant: PropTypes.string,
+  onPress: PropTypes.func,
+  style: Text.propTypes.style,
+};
+
 const styles = StyleSheet.create({
   regular: {
     fontFamily: REGULAR_FF,
@@ -126,12 +135,3 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
 });
-
-Typography.propTypes = {
-  fontWeight: PropTypes.oneOf(["regular", "medium", "semi-bold", "bold"]),
-  color: PropTypes.oneOf(["primary", "secondary", "accent"]),
-  fontSize: PropTypes.number,
-  variant: PropTypes.string,
-  onPress: PropTypes.func,
-  style: Text.propTypes.style,
-};

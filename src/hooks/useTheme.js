@@ -17,11 +17,6 @@ const DARK_MODE_COLORS = {
     primary: "#ECECEC",
     secondary: "#040404",
   },
-  // The accent objects are same in both dark mode and light mode
-  accent: {
-    primary: "#03B591",
-    secondary: "#5C5B66",
-  },
 };
 
 const LIGHT_MODE_COLORS = {
@@ -41,11 +36,6 @@ const LIGHT_MODE_COLORS = {
     primary: "#080808",
     secondary: "#F8F6F6",
   },
-  // The accent objects are same in both dark mode and light mode
-  accent: {
-    primary: "#03B591",
-    secondary: "#5C5B66",
-  },
 };
 
 const COMMON = {
@@ -55,12 +45,27 @@ const COMMON = {
   red: "#E32636",
 };
 
+const ACCENT = {
+  primary: "#006D77",
+  secondary: "#7A8CA9",
+};
+
 const useTheme = () => {
   const [isDarkModeActive, setIsDarkModeActive] = useState(false);
 
   return isDarkModeActive
-    ? { ...DARK_MODE_COLORS, common: COMMON, statusBarStyle: "light-content" }
-    : { ...LIGHT_MODE_COLORS, common: COMMON, statusBarStyle: "dark-content" };
+    ? {
+        ...DARK_MODE_COLORS,
+        common: COMMON,
+        accent: ACCENT,
+        statusBarStyle: "light-content",
+      }
+    : {
+        ...LIGHT_MODE_COLORS,
+        common: COMMON,
+        accent: ACCENT,
+        statusBarStyle: "dark-content",
+      };
 };
 
 export default useTheme;
