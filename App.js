@@ -24,7 +24,7 @@ import {
 import MainRouter from "./src/routers/MainRouter";
 import Container from "./src/components/Container";
 import { useSelector, useDispatch } from "react-redux";
-import { setLoggedInStatus } from "./src/actions/personActions";
+import { setLoggedInStatus } from "./src/reducers/personReducer";
 
 export default function App() {
   let [fontsLoaded] = useFonts({

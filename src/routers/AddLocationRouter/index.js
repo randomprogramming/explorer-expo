@@ -6,6 +6,7 @@ import Typography from "../../components/Typography";
 import { useSelector } from "react-redux";
 import Container from "../../components/Container";
 import SignInButton from "../../components/SignInButton";
+import LoginScreen from "../../screens/auth/LoginScreen";
 
 const Stack = createStackNavigator();
 
@@ -17,7 +18,7 @@ function NoAuthScreen({ navigation }) {
         We can't wait for you to add your own location for others to explore,
         but you will need to sign in to do that.
       </Typography>
-      <SignInButton onPress={() => console.log("hello worlr")} />
+      <SignInButton onPress={() => navigation.navigate(names.LOGIN_SCREEN)} />
     </Container>
   );
 }
@@ -39,6 +40,9 @@ const AddLocationRouter = () => {
         component={AddLocationScreen}
       />
       <Stack.Screen name={names.NO_AUTH_SCREEN} component={NoAuthScreen} />
+      <Stack.Screen name={names.LOGIN_SCREEN} component={LoginScreen} />
+      {/* TODO: Create a AuthRouter, so that we don't have to create both login and
+      register screen each time */}
     </Stack.Navigator>
   );
 };
