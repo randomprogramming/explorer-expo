@@ -2,17 +2,14 @@ import React, { useState } from "react";
 import { KeyboardAvoidingView, View } from "react-native";
 import CustomTextInput from "../../components/CustomTextInput";
 import Typography from "../../components/Typography";
-// import { REGISTER_SCREEN } from "../../routers/NoAuthRouter/names";
 import styles from "./styles";
-// import Link from "../../components/Link";
+import Link from "../../components/Link";
 import BigButton from "../../components/BigButton";
 import { ScrollView } from "react-native-gesture-handler";
-// import Axios from "axios";
-// import { LOGIN_URL } from "../../../apiLinks";
 import { useDispatch, useSelector } from "react-redux";
-// import { setToken } from "../../actions/tokenActions";
 import useTheme from "../../hooks/useTheme";
 import { handleLogin } from "../../actions/personActions";
+import { REGISTER_SCREEN } from "../../routers/NoAuthRouter/names";
 
 const username = "username";
 const password = "password";
@@ -24,7 +21,6 @@ const LoginScreen = ({ navigation }) => {
     [username]: "",
     [password]: "",
   });
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [serverResponse, setServerResponse] = useState({
     statusCode: 0,
     message: "",
@@ -46,44 +42,16 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLoginPress = async () => {
     dispatch(handleLogin(loginData));
-    // setIsLoggingIn(true);
-    // Axios({
-    //   method: "POST",
-    //   url: LOGIN_URL,
-    //   data: loginData,
-    //   timeout: 7000, // If there was no response in 7 seconds, timeout the request
-    // })
-    //   .then((res) => {
-    //     setServerResponse({
-    //       statusCode: res.status,
-    //       message: res.data.message,
-    //     });
-    //     // Save the token we got in the Keychain
-    //     dispatch(setToken(res.data.token, true));
-    //   })
-    //   .catch((err) => {
-    //     setServerResponse({
-    //       statusCode: err && err.status,
-    //       message:
-    //         (err && err.response && err.response.data) ||
-    //         "There was an error logging You in, please try again.",
-    //     });
-    //   })
-    //   .finally(() => setIsLoggingIn(false));
   };
 
   return (
+    // TODO: Replace with scrollviewcontainer component
     <KeyboardAvoidingView
       style={[styles.main, { backgroundColor: theme.background.primary[0] }]}
       behavior={Platform.OS === "ios" && "padding"}
     >
       <ScrollView contentContainerStyle={styles.flexGrow}>
         <View style={styles.contentContainer}>
-          {isFetchingLoginData ? (
-            <Typography>Yes</Typography>
-          ) : (
-            <Typography>No</Typography>
-          )}
           <Typography variant="h2">Let's get you signed in</Typography>
           <Typography>
             Sign in to get access to features such as adding your own locations,
@@ -112,13 +80,13 @@ const LoginScreen = ({ navigation }) => {
 
           <View style={styles.linkContainer}>
             <Typography>Don't have an account yet? </Typography>
-            {/* <Link onPress={() => navigation.navigate(REGISTER_SCREEN)}>
+            <Link onPress={() => navigation.navigate(REGISTER_SCREEN)}>
               Sign up here
-            </Link> */}
+            </Link>
           </View>
 
           <BigButton
-            disabled={isLoggingIn}
+            disabled={isFetchingLoginData}
             title="Sign In"
             onPress={handleLoginPress}
           />
