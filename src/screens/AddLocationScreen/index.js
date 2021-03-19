@@ -1,10 +1,14 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import Typography from "../../components/Typography";
 import styles from "./styles";
 
 const AddLocationScreen = () => {
-  return <Typography>Add location screen</Typography>;
+  return (
+    <View style={{ flex: 1, backgroundColor: "lightblue" }}>
+      <Typography>Hello world</Typography>
+    </View>
+  );
 };
 
 export default AddLocationScreen;

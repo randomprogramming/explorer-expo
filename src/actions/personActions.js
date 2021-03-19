@@ -26,7 +26,7 @@ export function handleLogin(loginData) {
       });
 
       const { token } = response.data;
-      dispatch(fetchUsernameFromToken(token));
+      dispatch(fetchUsernameFromToken(token, true));
       dispatch(setToken(token));
     } catch (err) {
       console.log("Error when fetching token:", err);
@@ -36,7 +36,7 @@ export function handleLogin(loginData) {
   };
 }
 
-export function fetchUsernameFromToken(token) {
+export function fetchUsernameFromToken(token, useOnLoginSuccessCallback) {
   return async (dispatch, getState) => {
     // If we want to fetch username right after logging in,
     // The token might not be saved in the redux state yet, so we have to pass the token
@@ -53,6 +53,11 @@ export function fetchUsernameFromToken(token) {
           Authorization: "Bearer " + token,
         },
       });
+
+      const { onLoginSuccess } = getState().person;
+      if (useOnLoginSuccessCallback && onLoginSuccess) {
+        onLoginSuccess();
+      }
 
       const { username } = response.data;
       dispatch(setUsername(username));

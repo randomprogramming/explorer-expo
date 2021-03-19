@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as names from "./names";
 import AddLocationScreen from "../../screens/AddLocationScreen";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NoAuthRouter from "../NoAuthRouter";
+import { setOnLoginSuccess } from "../../reducers/personReducer";
+import { DISCOVER_SCREEN } from "../MainRouter/names";
 
 const Stack = createStackNavigator();
 
@@ -21,8 +23,18 @@ function MainRouter() {
   );
 }
 
-const AddLocationRouter = () => {
+const AddLocationRouter = ({ navigation }) => {
   const isLoggedIn = useSelector((state) => state.person.isLoggedIn);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // When this component loads, set the on login success callback function, which..
+    // naturally gets called when the login succeeds
+    if (!isLoggedIn) {
+      dispatch(setOnLoginSuccess(() => navigation.navigate(DISCOVER_SCREEN)));
+    }
+  }, []);
 
   return isLoggedIn ? (
     <MainRouter />

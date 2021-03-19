@@ -6,6 +6,7 @@ const initialState = {
   isLoggedIn: false,
 
   isFetchingLoginData: false,
+  onLoginSuccess: function () {},
 };
 
 const personSlice = createSlice({
@@ -36,6 +37,9 @@ const personSlice = createSlice({
     setUsername(state, action) {
       state.username = action.payload;
     },
+    setOnLoginSuccess(state, action) {
+      state.onLoginSuccess = action.payload;
+    },
   },
 });
 
@@ -46,6 +50,7 @@ export const {
   setToken,
   setInitialState,
   setUsername,
+  setOnLoginSuccess,
 } = personSlice.actions;
 
 export default personSlice.reducer;

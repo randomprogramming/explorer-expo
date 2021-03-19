@@ -8,18 +8,20 @@ import pxGenerator from "../../helpers/pxGenerator";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
 import MapScreen from "../../screens/MapScreen";
-import AddLocationScreen from "../../screens/AddLocationScreen";
 import LikedLocationsScreen from "../../screens/LikedLocationsScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
 import AddLocationRouter from "../AddLocationRouter";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 const ICON_SIZE = 26;
 
 const MainRouter = () => {
+  const isLoggedIn = useSelector((state) => state.person.isLoggedIn);
+
   const theme = useTheme();
 
   return (
@@ -46,8 +48,15 @@ const MainRouter = () => {
             case names.LIKED_LOCATIONS_SCREEN:
               return <Foundation name="heart" size={ICON_SIZE} color={clr} />;
             case names.SETTINGS_SCREEN:
-              return (
-                <Fontisto name="player-settings" size={ICON_SIZE} color={clr} />
+              return isLoggedIn ? (
+                // TODO: Use the persons avatar instead of this heart icon
+                <Foundation name="heart" size={ICON_SIZE} color={clr} />
+              ) : (
+                <MaterialCommunityIcons
+                  name="account"
+                  size={ICON_SIZE}
+                  color={clr}
+                />
               );
             default:
               console.log("Error");
@@ -82,6 +91,7 @@ const MainRouter = () => {
         name={names.LIKED_LOCATIONS_SCREEN}
         component={LikedLocationsScreen}
       />
+      {/* TODO: Replace settings screen with account screen */}
       <Tab.Screen name={names.SETTINGS_SCREEN} component={SettingsScreen} />
     </Tab.Navigator>
   );
