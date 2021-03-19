@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import * as names from "./names";
 import DiscoverScreen from "../../screens/DiscoverScreen";
 import useTheme from "../../hooks/useTheme";
@@ -29,6 +29,7 @@ const MainRouter = () => {
           backgroundColor: theme.background.primary[0],
           paddingTop: 8,
         },
+        keyboardHidesTabBar: Platform.OS === "android",
       }}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {

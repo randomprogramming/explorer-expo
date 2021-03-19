@@ -8,11 +8,6 @@ export default StyleSheet.create({
   flexGrow: {
     flexGrow: 1,
   },
-  contentContainer: {
-    paddingHorizontal: pxGenerator(5),
-    paddingVertical: pxGenerator(5),
-    flex: 1,
-  },
   linkContainer: {
     flexDirection: "row",
     marginTop: pxGenerator(3),

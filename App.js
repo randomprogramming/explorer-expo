@@ -25,6 +25,7 @@ import MainRouter from "./src/routers/MainRouter";
 import Container from "./src/components/Container";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoggedInStatus } from "./src/reducers/personReducer";
+import ScrollViewContainer from "./src/components/ScrollViewContainer";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -66,6 +67,7 @@ export default function App() {
 
   return (
     <Container>
+      {/* <ScrollViewContainer /> */}
       {
         fontsLoaded ? <MainRouter /> : <Text>Fonts not loaded!</Text> //TODO: replace this with a image screen or something
       }

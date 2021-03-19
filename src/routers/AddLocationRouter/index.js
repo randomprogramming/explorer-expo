@@ -2,10 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as names from "./names";
 import AddLocationScreen from "../../screens/AddLocationScreen";
-import Typography from "../../components/Typography";
 import { useSelector } from "react-redux";
-import Container from "../../components/Container";
-import SignInButton from "../../components/SignInButton";
 import NoAuthRouter from "../NoAuthRouter";
 
 const Stack = createStackNavigator();
