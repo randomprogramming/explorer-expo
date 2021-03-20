@@ -36,7 +36,8 @@ const AddLocationRouter = ({ navigation }) => {
     }
   }, []);
 
-  return isLoggedIn ? (
+  // TODO: Change this to without the !, this is just for testing purposes for right now.
+  return !isLoggedIn ? (
     <MainAddLocationRouter />
   ) : (
     <NoAuthRouter

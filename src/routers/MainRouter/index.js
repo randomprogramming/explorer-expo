@@ -1,5 +1,5 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Platform, View } from "react-native";
 import * as names from "./names";
 import DiscoverScreen from "../../screens/DiscoverScreen";
@@ -21,6 +21,9 @@ const ICON_SIZE = 26;
 
 const MainRouter = () => {
   const isLoggedIn = useSelector((state) => state.person.isLoggedIn);
+  const isBottomTabBarVisible = useSelector(
+    (state) => state.appState.isBottomTabBarVisible
+  );
 
   const theme = useTheme();
 
@@ -86,6 +89,9 @@ const MainRouter = () => {
       <Tab.Screen
         name={names.ADD_LOCATION_SCREEN}
         component={AddLocationRouter}
+        options={() => ({
+          tabBarVisible: isBottomTabBarVisible,
+        })}
       />
       <Tab.Screen
         name={names.LIKED_LOCATIONS_SCREEN}
