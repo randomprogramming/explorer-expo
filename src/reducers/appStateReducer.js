@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isBottomTabBarVisible: true,
+  bottomTabBarIconSize: 23,
 };
 
 const appStateSlice = createSlice({

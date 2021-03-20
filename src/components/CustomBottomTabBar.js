@@ -9,6 +9,7 @@ import {
 import useTheme from "../hooks/useTheme";
 import posed from "react-native-pose";
 import useIsKeyboardShown from "../hooks/useIsKeyboardShown";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const tabWidth = windowWidth / 5;
@@ -23,11 +24,20 @@ const SpotLight = posed.View({
 
 const CustomBottomTabBar = ({ state, descriptors, navigation }) => {
   const { index: activeRouteIndex } = state;
+
   const focusedOptions = descriptors[state.routes[state.index].key].options;
+
+  const isBottomTabBarVisible = useSelector(
+    (state) => state.appState.isBottomTabBarVisible
+  );
 
   const theme = useTheme();
 
   const isKeyboardShown = useIsKeyboardShown();
+
+  if (!isBottomTabBarVisible) {
+    return null;
+  }
 
   // If we are on android, and the keyboard is open, we need to hide the tab bar
   if (

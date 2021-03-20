@@ -3,6 +3,7 @@ import Svg, { Path } from "react-native-svg";
 
 const Icon = () => {};
 
+// TODO: PropTypes and write this in a better way
 Icon.Home = function ({ size, color }) {
   return (
     <Svg height={size} viewBox="0 0 512 512" width={size}>

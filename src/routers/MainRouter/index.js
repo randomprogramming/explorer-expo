@@ -1,6 +1,5 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Platform } from "react-native";
 import * as names from "./names";
 import DiscoverScreen from "../../screens/DiscoverScreen";
 import useTheme from "../../hooks/useTheme";
@@ -15,50 +14,39 @@ import Icon from "../../components/Icon";
 
 const Tab = createBottomTabNavigator();
 
-const ICON_SIZE = 23;
-
 const MainRouter = () => {
   const isLoggedIn = useSelector((state) => state.person.isLoggedIn);
-  const isBottomTabBarVisible = useSelector(
-    (state) => state.appState.isBottomTabBarVisible
-  );
+  const iconSize = useSelector((state) => state.appState.bottomTabBarIconSize);
 
   const theme = useTheme();
 
   return (
     <Tab.Navigator
       tabBar={(props) => <CustomBottomTabBar {...props} />}
-      tabBarOptions={{
-        tabStyle: {
-          backgroundColor: theme.background.primary[0],
-          paddingTop: 8,
-        },
-        keyboardHidesTabBar: Platform.OS === "android",
-      }}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           const clr = focused ? theme.accent.primary : theme.accent.secondary;
 
           switch (route.name) {
             case names.DISCOVER_SCREEN:
-              return <Icon.Home size={ICON_SIZE} color={clr} />;
+              return <Icon.Home size={iconSize} color={clr} />;
             case names.MAP_SCREEN:
-              return (
-                <Icon.Map name="location-pin" size={ICON_SIZE} color={clr} />
-              );
+              return <Icon.Map size={iconSize} color={clr} />;
             case names.ADD_LOCATION_SCREEN:
-              return <Icon.Plus name="plus" size={ICON_SIZE} color={clr} />;
+              return <Icon.Plus size={iconSize} color={clr} />;
             case names.LIKED_LOCATIONS_SCREEN:
-              return <Icon.Heart name="heart" size={ICON_SIZE} color={clr} />;
+              return <Icon.Heart size={iconSize} color={clr} />;
             case names.SETTINGS_SCREEN:
               return isLoggedIn ? (
                 // TODO: Chance this with users actual picture
-                <Foundation name="heart" size={ICON_SIZE} color={clr} />
+                <Foundation name="heart" size={iconSize} color={clr} />
               ) : (
-                <Icon.Avatar name="account" size={ICON_SIZE} color={clr} />
+                <Icon.Avatar name="account" size={iconSize} color={clr} />
               );
             default:
-              console.log("Error");
+              console.log(
+                "Error when rendering BottomTabBar icons in MainRouter."
+              );
           }
         },
       })}
@@ -68,9 +56,6 @@ const MainRouter = () => {
       <Tab.Screen
         name={names.ADD_LOCATION_SCREEN}
         component={AddLocationRouter}
-        options={() => ({
-          tabBarVisible: isBottomTabBarVisible,
-        })}
       />
       <Tab.Screen
         name={names.LIKED_LOCATIONS_SCREEN}
