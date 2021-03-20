@@ -9,7 +9,7 @@ import { DISCOVER_SCREEN } from "../MainRouter/names";
 
 const Stack = createStackNavigator();
 
-function MainRouter() {
+function MainAddLocationRouter() {
   return (
     <Stack.Navigator
       headerMode="none"
@@ -37,7 +37,7 @@ const AddLocationRouter = ({ navigation }) => {
   }, []);
 
   return isLoggedIn ? (
-    <MainRouter />
+    <MainAddLocationRouter />
   ) : (
     <NoAuthRouter
       noAuthScreenTitle="Add Location"
