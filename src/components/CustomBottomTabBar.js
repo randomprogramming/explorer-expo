@@ -1,7 +1,14 @@
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+} from "react-native";
 import useTheme from "../hooks/useTheme";
 import posed from "react-native-pose";
+import useIsKeyboardShown from "../hooks/useIsKeyboardShown";
 
 const windowWidth = Dimensions.get("window").width;
 const tabWidth = windowWidth / 5;
@@ -20,7 +27,13 @@ const CustomBottomTabBar = ({ state, descriptors, navigation }) => {
 
   const theme = useTheme();
 
-  if (focusedOptions.tabBarVisible === false) {
+  const isKeyboardShown = useIsKeyboardShown();
+
+  // If we are on android, and the keyboard is open, we need to hide the tab bar
+  if (
+    focusedOptions.tabBarVisible === false ||
+    (Platform.OS == "android" && isKeyboardShown)
+  ) {
     return null;
   }
 
