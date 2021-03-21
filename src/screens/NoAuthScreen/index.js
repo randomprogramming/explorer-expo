@@ -1,6 +1,6 @@
 import React from "react";
+import BigButton from "../../components/BigButton";
 import Container from "../../components/Container";
-import SignInButton from "../../components/SignInButton";
 import Typography from "../../components/Typography";
 
 function NoAuthScreen({ navigation, route }) {
@@ -8,7 +8,9 @@ function NoAuthScreen({ navigation, route }) {
     <Container defaultPadding>
       <Typography variant="h1">{route.params.noAuthScreenTitle}</Typography>
       <Typography>{route.params.noAuthScreenText}</Typography>
-      <SignInButton
+      <BigButton
+        isSmall
+        title="Sign In"
         onPress={() => navigation.navigate(route.params.navigateTo)}
       />
     </Container>

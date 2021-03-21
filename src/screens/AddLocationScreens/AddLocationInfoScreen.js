@@ -5,15 +5,19 @@ import Typography from "../../components/Typography";
 // import styles from "./styles";
 import { Camera } from "expo-camera";
 import { useSelector } from "react-redux";
+import Container from "../../components/Container";
+import BigButton from "../../components/BigButton";
+import { ADD_LOCATION_SCREEN_MAIN } from "../../routers/AddLocationRouter/names";
 
-let camera;
-const AddLocationScreen = () => {
+// let camera;
+const AddLocationInfoScreen = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [canAskAgain, setCanAskAgain] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   const media = useSelector((state) => state.addLocation.media);
+  const camera = useRef();
 
   useEffect(() => {
     (async () => {
@@ -25,9 +29,12 @@ const AddLocationScreen = () => {
   }, []);
 
   async function takePicture() {
+    console.log("will tak pic");
     try {
       if (camera && isCameraReady) {
-        let photo = await camera.takePictureAsync({ skipProcessing: false });
+        let photo = await camera.current.takePictureAsync({
+          skipProcessing: false,
+        });
         console.log(photo);
       } else {
         console.log("NOPE!");
@@ -50,16 +57,16 @@ const AddLocationScreen = () => {
   //   );
   // }
 
-  if (!hasCameraPermission && !canAskAgain) {
-    askForCameraPermission();
-    return (
-      <View>
-        <Typography>
-          Please allow the app to access the camera in your settings.
-        </Typography>
-      </View>
-    );
-  }
+  // if (!hasCameraPermission && !canAskAgain) {
+  //   askForCameraPermission();
+  //   return (
+  //     <View>
+  //       <Typography>
+  //         Please allow the app to access the camera in your settings.
+  //       </Typography>
+  //     </View>
+  //   );
+  // }
   // media.length === 0 ? (
   {
     /* <TouchableOpacity
@@ -87,24 +94,36 @@ const AddLocationScreen = () => {
           ></TouchableOpacity> */
   }
   return (
-    <View style={{ flex: 1, backgroundColor: "lightblue" }}>
-      <Camera
-        ref={(r) => {
-          camera = r;
-        }}
-        style={styles.camera}
-        type={type}
-        useCamera2Api
-        onCameraReady={() => setIsCameraReady(true)}
-        onMountError={(err) => console.log("error", err)}
-      >
-        <View style={styles.buttonContainer}>
-          <View style={{ alignSelf: "flex-end" }}>
-            <Button title="Take Pic" onPress={takePicture} />
-          </View>
-        </View>
-      </Camera>
-    </View>
+    // <View style={{ flex: 1, backgroundColor: "lightblue" }}>
+    //   <Camera
+    //     // ref={(r) => {
+    //     //   camera = r;
+    //     // }}
+    //     ref={camera}
+    //     style={styles.camera}
+    //     type={type}
+    //     useCamera2Api
+    //     onCameraReady={() => setIsCameraReady(true)}
+    //     onMountError={(err) => console.log("error", err)}
+    //   >
+    //     <View style={styles.buttonContainer}>
+    //       <View style={{ alignSelf: "flex-end" }}>
+    //         <Button title="Take Pic" onPress={takePicture} />
+    //       </View>
+    //     </View>
+    //   </Camera>
+    // </View>
+    <Container defaultPadding headerTitle="Add Location">
+      <Typography>
+        Once you add a location, the images and exact position you add will be
+        available for others to see and explore.
+      </Typography>
+      <BigButton
+        title="Add"
+        onPress={() => navigation.navigate(ADD_LOCATION_SCREEN_MAIN)}
+        isSmall
+      />
+    </Container>
   );
 };
 
@@ -137,4 +156,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddLocationScreen;
+export default AddLocationInfoScreen;

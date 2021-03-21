@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as names from "./names";
-import AddLocationScreen from "../../screens/AddLocationScreen";
+import AddLocationInfoScreen from "../../screens/AddLocationScreens/AddLocationInfoScreen";
 import { useDispatch, useSelector } from "react-redux";
 import NoAuthRouter from "../NoAuthRouter";
 import { setOnLoginSuccess } from "../../reducers/personReducer";
 import { DISCOVER_SCREEN } from "../MainRouter/names";
+import AddLocationMainScreen from "../../screens/AddLocationScreens/AddLocationMainScreen";
 
 const Stack = createStackNavigator();
 
@@ -13,11 +14,15 @@ function MainAddLocationRouter() {
   return (
     <Stack.Navigator
       headerMode="none"
-      initialRouteName={names.ADD_LOCATION_SCREEN_MAIN}
+      initialRouteName={names.ADD_LOCATION_INFO_SCREEN}
     >
       <Stack.Screen
+        name={names.ADD_LOCATION_INFO_SCREEN}
+        component={AddLocationInfoScreen}
+      />
+      <Stack.Screen
         name={names.ADD_LOCATION_SCREEN_MAIN}
-        component={AddLocationScreen}
+        component={AddLocationMainScreen}
       />
     </Stack.Navigator>
   );
@@ -36,7 +41,7 @@ const AddLocationRouter = ({ navigation }) => {
     }
   }, []);
 
-  return isLoggedIn ? (
+  return !isLoggedIn ? (
     <MainAddLocationRouter />
   ) : (
     <NoAuthRouter
