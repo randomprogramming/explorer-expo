@@ -6,26 +6,39 @@ import App from "./App";
 import useTheme from "./src/hooks/useTheme";
 import store from "./store";
 import { NavigationContainer } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+
+function MainWrapper() {
+  // We want to use redux state from some of the other wrappers, so we have to split them up
+  return (
+    <Provider store={store}>
+      <WithWrapper />
+    </Provider>
+  );
+}
 
 function WithWrapper() {
   const theme = useTheme();
 
+  const isCameraActive = useSelector((state) => state.appState.isCameraActive);
+
   return (
     <NavigationContainer>
-      <Provider store={store}>
-        <StatusBar
-          barStyle={theme.statusBarStyle}
-          backgroundColor={theme.background.primary[0]}
-        />
-        <SafeAreaView
-          style={[
-            styles.main,
-            { backgroundColor: theme.background.primary[0] },
-          ]}
-        >
-          <App />
-        </SafeAreaView>
-      </Provider>
+      <StatusBar
+        barStyle={theme.statusBarStyle}
+        backgroundColor={theme.background.primary[0]}
+        hidden={isCameraActive}
+      />
+      <SafeAreaView
+        style={[
+          styles.main,
+          isCameraActive
+            ? { backgroundColor: theme.common.black }
+            : { backgroundColor: theme.background.primary[0] },
+        ]}
+      >
+        <App />
+      </SafeAreaView>
     </NavigationContainer>
   );
 }
@@ -36,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-registerRootComponent(WithWrapper);
+registerRootComponent(MainWrapper);

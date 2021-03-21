@@ -40,7 +40,7 @@ const LIGHT_MODE_COLORS = {
 
 const COMMON = {
   white: "#FFFFFF",
-  black: "#000000",
+  black: "#080808",
   orange: "#FFA500",
   red: "#E32636",
 };
@@ -53,15 +53,19 @@ const ACCENT = {
 const useTheme = () => {
   const [isDarkModeActive, setIsDarkModeActive] = useState(false);
 
+  const [darkModeColors, setDarkModeColors] = useState(DARK_MODE_COLORS);
+
+  const [lightModeColors, setLightModeColors] = useState(LIGHT_MODE_COLORS);
+
   return isDarkModeActive
     ? {
-        ...DARK_MODE_COLORS,
+        ...darkModeColors,
         common: COMMON,
         accent: ACCENT,
         statusBarStyle: "light-content",
       }
     : {
-        ...LIGHT_MODE_COLORS,
+        ...lightModeColors,
         common: COMMON,
         accent: ACCENT,
         statusBarStyle: "dark-content",

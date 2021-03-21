@@ -1,31 +1,58 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, TouchableOpacity, Button } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  StatusBar,
+  SafeAreaView,
+} from "react-native";
 import * as Permissions from "expo-permissions";
-import Typography from "../../components/Typography";
 import { Camera } from "expo-camera";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  setIsBottomTabBarVisible,
+  setIsCameraActive,
+} from "../reducers/appStateReducer";
+import Typography from "./Typography";
+import useTheme from "../hooks/useTheme";
 
-const Camera = () => {
+const CameraComponent = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
 
-  const camera = useRef(initialValue);
+  const camera = useRef();
+
+  const dispatch = useDispatch();
+
+  const theme = useTheme();
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const cameraPerm = await Permissions.getAsync(Permissions.CAMERA);
+  //     setHasCameraPermission(cameraPerm.granted);
+  //   })();
+  // }, []);
 
   useEffect(() => {
-    (async () => {
-      const cameraPerm = await Permissions.getAsync(Permissions.CAMERA);
-      setHasCameraPermission(cameraPerm.granted);
-    })();
+    dispatch(setIsBottomTabBarVisible(false));
+    dispatch(setIsCameraActive(true));
+    return () => {
+      dispatch(setIsBottomTabBarVisible(true));
+      dispatch(setIsCameraActive(false));
+    };
   }, []);
 
   return (
-    <View>
-      <Text></Text>
+    <View style={{ flex: 1, backgroundColor: "lightblue" }}>
+      <Camera style={{ flex: 1 }}>
+        <Typography>We here</Typography>
+      </Camera>
     </View>
   );
 };
 
-export default Camera;
+export default CameraComponent;
 
 const styles = StyleSheet.create({});
