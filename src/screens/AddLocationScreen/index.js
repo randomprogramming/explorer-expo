@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, StyleSheet, TouchableOpacity, Button } from "react-native";
 import * as Permissions from "expo-permissions";
 import Typography from "../../components/Typography";
 // import styles from "./styles";
 import { Camera } from "expo-camera";
+import { useSelector } from "react-redux";
 
+let camera;
 const AddLocationScreen = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [canAskAgain, setCanAskAgain] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
+
+  const media = useSelector((state) => state.addLocation.media);
 
   useEffect(() => {
     (async () => {
@@ -19,18 +24,31 @@ const AddLocationScreen = () => {
     })();
   }, []);
 
+  async function takePicture() {
+    try {
+      if (camera && isCameraReady) {
+        let photo = await camera.takePictureAsync({ skipProcessing: false });
+        console.log(photo);
+      } else {
+        console.log("NOPE!");
+      }
+    } catch (err) {
+      console.log("Error when taking picture:", err);
+    }
+  }
+
   async function askForCameraPermission() {
     const { status } = await Camera.requestPermissionsAsync();
     setHasCameraPermission(status === "granted");
   }
 
-  if (!hasCameraPermission && canAskAgain) {
-    return (
-      <View>
-        <Typography>!Ask for camera permisssion!</Typography>
-      </View>
-    );
-  }
+  // if (!hasCameraPermission && canAskAgain) {
+  //   return (
+  //     <View>
+  //       <Typography>No Permission</Typography>
+  //     </View>
+  //   );
+  // }
 
   if (!hasCameraPermission && !canAskAgain) {
     askForCameraPermission();
@@ -42,12 +60,9 @@ const AddLocationScreen = () => {
       </View>
     );
   }
-
-  return (
-    <View style={{ flex: 1, backgroundColor: "lightblue" }}>
-      {/* <Camera style={styles.camera} type={type}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
+  // media.length === 0 ? (
+  {
+    /* <TouchableOpacity
             style={styles.button}
             onPress={() => {
               setType(
@@ -58,9 +73,37 @@ const AddLocationScreen = () => {
             }}
           >
             <Typography style={styles.text}> Flip </Typography>
-          </TouchableOpacity>
+          </TouchableOpacity> */
+  }
+  {
+    /* <TouchableOpacity
+            onPress={takePicture}
+            style={{
+              width: 30,
+              height: 30,
+              backgroundColor: "red",
+              borderRadius: 20,
+            }}
+          ></TouchableOpacity> */
+  }
+  return (
+    <View style={{ flex: 1, backgroundColor: "lightblue" }}>
+      <Camera
+        ref={(r) => {
+          camera = r;
+        }}
+        style={styles.camera}
+        type={type}
+        useCamera2Api
+        onCameraReady={() => setIsCameraReady(true)}
+        onMountError={(err) => console.log("error", err)}
+      >
+        <View style={styles.buttonContainer}>
+          <View style={{ alignSelf: "flex-end" }}>
+            <Button title="Take Pic" onPress={takePicture} />
+          </View>
         </View>
-      </Camera> */}
+      </Camera>
     </View>
   );
 };
@@ -74,8 +117,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     zIndex: 99,
-    width: 100,
-    height: 100,
+    width: 300,
+    height: 600,
   },
   buttonContainer: {
     flex: 1,
