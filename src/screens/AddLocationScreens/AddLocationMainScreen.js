@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Camera from "../../components/Camera";
 import {
   appendMediaToState,
+  setCoordinates,
   setTitle,
 } from "../../reducers/addLocationReducer";
 import Container from "../../components/Container";
@@ -14,12 +15,27 @@ import useTheme from "../../hooks/useTheme";
 import Icon from "../../components/Icon";
 import CustomTextInput from "../../components/CustomTextInput";
 import ScrollViewContainer from "../../components/ScrollViewContainer";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
+import Switch from "../../components/Switch";
+
+const ENTER_MANUALLY = "ENTER_MANUALLY_KEY";
+const CURRENT_LOCATION = "USE_CURRENT_LOCATION_KEY";
+const SWITCH_COMPONENTS = [
+  { key: ENTER_MANUALLY, text: "Enter manually" },
+  { key: CURRENT_LOCATION, text: "Use current location" },
+];
 
 const AddLocationMainScreen = ({ navigation }) => {
   const media = useSelector((state) => state.addLocation.media);
   const title = useSelector((state) => state.addLocation.title);
+  const selectedLatitude = useSelector(
+    (state) => state.addLocation.selectedLatitude
+  );
+  const selectedLongitude = useSelector(
+    (state) => state.addLocation.selectedLongitude
+  );
 
+  const [activeSwitchComponent, setActiveSwitchComponent] = useState(null);
   const [shouldShowCamera, setShouldShowCamera] = useState(true);
 
   const dispatch = useDispatch();
@@ -33,6 +49,12 @@ const AddLocationMainScreen = ({ navigation }) => {
 
   function handleCancelButtonPress() {
     setShouldShowCamera(false);
+  }
+
+  function handleMapPress(coordinates) {
+    if (activeSwitchComponent === ENTER_MANUALLY) {
+      dispatch(setCoordinates(coordinates));
+    }
   }
 
   // TODO: Add an animation for the camera sliding out of the screen
@@ -115,30 +137,38 @@ const AddLocationMainScreen = ({ navigation }) => {
         <Typography fontWeight="semi-bold" fontSize={20}>
           Location
         </Typography>
+        <Switch
+          style={{ marginVertical: pxGenerator(3) }}
+          components={SWITCH_COMPONENTS}
+          onChange={setActiveSwitchComponent}
+        />
         {/* TODO: read the docs for mapview, NSLocationWhenInUseUsageDescription has to be added and some api keys or smthing */}
-        <View
-          style={{
-            borderRadius: pxGenerator(4),
-            overflow: "hidden",
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 3,
-            },
-            shadowOpacity: 0.29,
-            shadowRadius: 4.65,
-            elevation: 7,
-          }}
-        >
-          <MapView
-            provider={undefined}
-            showsCompass={false}
-            showsMyLocationButton={true}
-            style={{
-              flex: 1,
-              minHeight: Dimensions.get("window").height / 3,
-            }}
-          />
+        {/* Excuse the mess here, we have to use overflow: hidden, but iOS doesnt like when you use overflow with shadows */}
+        <View style={[styles.shadow, styles.borderRadius]}>
+          <View style={[styles.mapContainer, styles.borderRadius]}>
+            <MapView
+              provider={undefined}
+              showsCompass={false}
+              showsMyLocationButton={true}
+              showsScale={false}
+              style={{
+                flex: 1,
+                minHeight: Dimensions.get("window").height / 3,
+              }}
+              onPress={(event) => handleMapPress(event.nativeEvent.coordinate)}
+            >
+              {selectedLongitude &&
+                selectedLatitude &&
+                activeSwitchComponent === ENTER_MANUALLY && (
+                  <Marker
+                    coordinate={{
+                      latitude: selectedLatitude,
+                      longitude: selectedLongitude,
+                    }}
+                  />
+                )}
+            </MapView>
+          </View>
         </View>
       </View>
     </ScrollViewContainer>

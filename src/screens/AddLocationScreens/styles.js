@@ -31,6 +31,12 @@ const styles = StyleSheet.create({
   containerSpacer: {
     marginVertical: pxGenerator(4),
   },
+  mapContainer: {
+    overflow: "hidden",
+  },
+  borderRadius: {
+    borderRadius: pxGenerator(4),
+  },
 });
 
 export default styles;
