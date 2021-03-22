@@ -14,6 +14,7 @@ import useTheme from "../../hooks/useTheme";
 import Icon from "../../components/Icon";
 import CustomTextInput from "../../components/CustomTextInput";
 import ScrollViewContainer from "../../components/ScrollViewContainer";
+import MapView from "react-native-maps";
 
 const AddLocationMainScreen = ({ navigation }) => {
   const media = useSelector((state) => state.addLocation.media);
@@ -109,6 +110,36 @@ const AddLocationMainScreen = ({ navigation }) => {
           value={title}
           onChange={(newValue) => dispatch(setTitle(newValue))}
         />
+      </View>
+      <View style={styles.containerSpacer}>
+        <Typography fontWeight="semi-bold" fontSize={20}>
+          Location
+        </Typography>
+        {/* TODO: read the docs for mapview, NSLocationWhenInUseUsageDescription has to be added and some api keys or smthing */}
+        <View
+          style={{
+            borderRadius: pxGenerator(4),
+            overflow: "hidden",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 3,
+            },
+            shadowOpacity: 0.29,
+            shadowRadius: 4.65,
+            elevation: 7,
+          }}
+        >
+          <MapView
+            provider={undefined}
+            showsCompass={false}
+            showsMyLocationButton={true}
+            style={{
+              flex: 1,
+              minHeight: Dimensions.get("window").height / 3,
+            }}
+          />
+        </View>
       </View>
     </ScrollViewContainer>
   );
