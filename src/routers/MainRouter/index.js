@@ -29,19 +29,19 @@ const MainRouter = () => {
 
           switch (route.name) {
             case names.DISCOVER_SCREEN:
-              return <Icon.Home size={iconSize} color={clr} />;
+              return <Icon name="home" size={iconSize} color={clr} />;
             case names.MAP_SCREEN:
-              return <Icon.Map size={iconSize} color={clr} />;
+              return <Icon name="map" size={iconSize} color={clr} />;
             case names.ADD_LOCATION_SCREEN:
-              return <Icon.Plus size={iconSize} color={clr} />;
+              return <Icon name="plus" size={iconSize} color={clr} />;
             case names.LIKED_LOCATIONS_SCREEN:
-              return <Icon.Heart size={iconSize} color={clr} />;
+              return <Icon name="heart" size={iconSize} color={clr} />;
             case names.SETTINGS_SCREEN:
               return isLoggedIn ? (
                 // TODO: Chance this with users actual picture
                 <Foundation name="heart" size={iconSize} color={clr} />
               ) : (
-                <Icon.Avatar name="account" size={iconSize} color={clr} />
+                <Icon name="heart" size={iconSize} color={clr} />
               );
             default:
               console.log(

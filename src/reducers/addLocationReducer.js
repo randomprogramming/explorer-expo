@@ -9,9 +9,13 @@ const initialState = {
 const addLocationSlice = createSlice({
   name: "addLocation",
   initialState,
-  reducers: {},
+  reducers: {
+    appendMediaToState(state, action) {
+      state.media.push(action.payload);
+    },
+  },
 });
 
-export const {} = addLocationSlice.actions;
+export const { appendMediaToState } = addLocationSlice.actions;
 
 export default addLocationSlice.reducer;

@@ -1,19 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import Typography from "../../components/Typography";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Camera from "../../components/Camera";
+import { appendMediaToState } from "../../reducers/addLocationReducer";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const AddLocationMainScreen = () => {
   const media = useSelector((state) => state.addLocation.media);
+  const [shouldShowCamera, setShouldShowCamera] = useState(true);
 
-  return media.length === 0 ? (
-    <View style={{ flex: 1 }}>
-      <Camera />
-    </View>
-  ) : (
+  const dispatch = useDispatch();
+
+  function handlePictureTaken(photo) {
+    dispatch(appendMediaToState(photo));
+    setShouldShowCamera(false);
+  }
+
+  function handleCancel() {
+    setShouldShowCamera(false);
+  }
+
+  // TODO: Add an animation for the camera sliding out of the screen
+  // If the media is empty, we want the user to take a picture before they can proceed to the next screen
+  if (media.length === 0 || shouldShowCamera) {
+    return (
+      <Camera
+        onPictureTaken={handlePictureTaken}
+        // If there is media loaded, we want to show the cancel button, which only hides the camera and goes back to the
+        // add location information
+        onCancelPress={media.length === 0 ? undefined : handleCancel}
+      />
+    );
+  }
+
+  return (
     <View>
-      <Typography>Add location main</Typography>
+      <Typography>
+        shouldShowCamera is false and state media is empty
+      </Typography>
+      <TouchableOpacity onPress={() => setShouldShowCamera(true)}>
+        <Typography>Open cams</Typography>
+      </TouchableOpacity>
     </View>
   );
 };

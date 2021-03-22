@@ -25,9 +25,10 @@ function WithWrapper() {
   return (
     <NavigationContainer>
       <StatusBar
-        barStyle={theme.statusBarStyle}
-        backgroundColor={theme.background.primary[0]}
-        hidden={isCameraActive}
+        barStyle={isCameraActive ? "light-content" : theme.statusBarStyle}
+        backgroundColor={
+          isCameraActive ? theme.common.black : theme.background.primary[0]
+        }
       />
       <SafeAreaView
         style={[

@@ -28,22 +28,6 @@ const AddLocationInfoScreen = ({ navigation }) => {
     })();
   }, []);
 
-  async function takePicture() {
-    console.log("will tak pic");
-    try {
-      if (camera && isCameraReady) {
-        let photo = await camera.current.takePictureAsync({
-          skipProcessing: false,
-        });
-        console.log(photo);
-      } else {
-        console.log("NOPE!");
-      }
-    } catch (err) {
-      console.log("Error when taking picture:", err);
-    }
-  }
-
   async function askForCameraPermission() {
     const { status } = await Camera.requestPermissionsAsync();
     setHasCameraPermission(status === "granted");
@@ -68,51 +52,8 @@ const AddLocationInfoScreen = ({ navigation }) => {
   //   );
   // }
   // media.length === 0 ? (
-  {
-    /* <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}
-          >
-            <Typography style={styles.text}> Flip </Typography>
-          </TouchableOpacity> */
-  }
-  {
-    /* <TouchableOpacity
-            onPress={takePicture}
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: "red",
-              borderRadius: 20,
-            }}
-          ></TouchableOpacity> */
-  }
+
   return (
-    // <View style={{ flex: 1, backgroundColor: "lightblue" }}>
-    //   <Camera
-    //     // ref={(r) => {
-    //     //   camera = r;
-    //     // }}
-    //     ref={camera}
-    //     style={styles.camera}
-    //     type={type}
-    //     useCamera2Api
-    //     onCameraReady={() => setIsCameraReady(true)}
-    //     onMountError={(err) => console.log("error", err)}
-    //   >
-    //     <View style={styles.buttonContainer}>
-    //       <View style={{ alignSelf: "flex-end" }}>
-    //         <Button title="Take Pic" onPress={takePicture} />
-    //       </View>
-    //     </View>
-    //   </Camera>
-    // </View>
     <Container defaultPadding headerTitle="Add Location">
       <Typography>
         Once you add a location, the images and exact position you add will be
@@ -126,34 +67,5 @@ const AddLocationInfoScreen = ({ navigation }) => {
     </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  camera: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    zIndex: 99,
-    width: 300,
-    height: 600,
-  },
-  buttonContainer: {
-    flex: 1,
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    margin: 20,
-  },
-  button: {
-    flex: 0.1,
-    alignSelf: "flex-end",
-    alignItems: "center",
-  },
-  text: {
-    fontSize: 18,
-    color: "white",
-  },
-});
 
 export default AddLocationInfoScreen;
