@@ -6,7 +6,7 @@ import Camera from "../../components/Camera";
 import { appendMediaToState } from "../../reducers/addLocationReducer";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const AddLocationMainScreen = () => {
+const AddLocationMainScreen = ({ navigation }) => {
   const media = useSelector((state) => state.addLocation.media);
   const [shouldShowCamera, setShouldShowCamera] = useState(true);
 
@@ -30,6 +30,7 @@ const AddLocationMainScreen = () => {
         // If there is media loaded, we want to show the cancel button, which only hides the camera and goes back to the
         // add location information
         onCancelPress={media.length === 0 ? undefined : handleCancel}
+        onBackButtonPress={navigation.goBack}
       />
     );
   }

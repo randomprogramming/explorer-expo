@@ -38,7 +38,7 @@ const MainRouter = () => {
               return <Icon name="heart" size={iconSize} color={clr} />;
             case names.SETTINGS_SCREEN:
               return isLoggedIn ? (
-                // TODO: Chance this with users actual picture
+                // TODO: Change this with users actual picture
                 <Foundation name="heart" size={iconSize} color={clr} />
               ) : (
                 <Icon name="heart" size={iconSize} color={clr} />

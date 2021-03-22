@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import * as Permissions from "expo-permissions";
 import { Camera } from "expo-camera";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   setIsBottomTabBarVisible,
   setIsCameraActive,
@@ -11,8 +11,15 @@ import Typography from "./Typography";
 import useTheme from "../hooks/useTheme";
 import pxGenerator from "../helpers/pxGenerator";
 import PropTypes from "prop-types";
+import Icon from "./Icon";
 
-const CameraComponent = ({ onPictureTaken, onCancelPress }) => {
+const CANCEL_TEXT_SIZE = 20;
+
+const CameraComponent = ({
+  onPictureTaken,
+  onCancelPress,
+  onBackButtonPress,
+}) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -39,7 +46,10 @@ const CameraComponent = ({ onPictureTaken, onCancelPress }) => {
       console.log("Error when taking picture: ", err);
     }
   }
-  // TODO: Handle NO PERMISSIONS
+  async function askForCameraPermission() {
+    const { status } = await Camera.requestPermissionsAsync();
+    setHasCameraPermission(status === "granted");
+  }
 
   useEffect(() => {
     (async () => {
@@ -49,13 +59,32 @@ const CameraComponent = ({ onPictureTaken, onCancelPress }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(setIsBottomTabBarVisible(false));
-    dispatch(setIsCameraActive(true));
-    return () => {
-      dispatch(setIsBottomTabBarVisible(true));
-      dispatch(setIsCameraActive(false));
-    };
-  }, []);
+    if (hasCameraPermission) {
+      dispatch(setIsBottomTabBarVisible(false));
+      dispatch(setIsCameraActive(true));
+      return () => {
+        dispatch(setIsBottomTabBarVisible(true));
+        dispatch(setIsCameraActive(false));
+      };
+    }
+  }, [hasCameraPermission]);
+
+  if (!hasCameraPermission) {
+    askForCameraPermission();
+
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: theme.background.primary[0],
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography>Please allow the app to use the camera.</Typography>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.main, { backgroundColor: theme.common.black }]}>
@@ -65,19 +94,24 @@ const CameraComponent = ({ onPictureTaken, onCancelPress }) => {
         ref={cameraRef}
         onCameraReady={() => setIsCameraReady(true)}
       >
-        <View
-          style={{
-            backgroundColor: "transparent",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: pxGenerator(6),
-            marginTop: pxGenerator(4),
-          }}
-        >
-          <Typography color="secondary">Back Button</Typography>
+        <View style={styles.topButtonsContainer}>
+          <View>
+            {onBackButtonPress && (
+              <Pressable onPress={onBackButtonPress} hitSlop={16}>
+                <Icon
+                  name="back"
+                  size={CANCEL_TEXT_SIZE + 4}
+                  color={theme.common.white}
+                />
+              </Pressable>
+            )}
+          </View>
           {onCancelPress && (
-            <Pressable onPress={onCancelPress}>
-              <Typography fontSize={20} color={theme.common.white}>
+            <Pressable onPress={onCancelPress} hitSlop={16}>
+              <Typography
+                fontSize={CANCEL_TEXT_SIZE}
+                color={theme.common.white}
+              >
                 Cancel
               </Typography>
             </Pressable>
@@ -105,6 +139,7 @@ export default CameraComponent;
 CameraComponent.propTypes = {
   onPictureTaken: PropTypes.func,
   onCancelPress: PropTypes.func,
+  onBackButtonPress: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -125,5 +160,12 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 60,
+  },
+  topButtonsContainer: {
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: pxGenerator(8),
+    marginTop: pxGenerator(6),
   },
 });
