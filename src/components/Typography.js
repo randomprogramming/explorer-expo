@@ -36,7 +36,7 @@ const Typography = ({
         tmpStyle.push({ color: theme.accent.secondary });
         break;
       default:
-        tmpStyle.push({ color: theme.text.primary });
+        tmpStyle.push({ color });
     }
 
     // If one of the pre-defined variants are selected, create a style according to that
@@ -102,7 +102,10 @@ export default Typography;
 
 Typography.propTypes = {
   fontWeight: PropTypes.oneOf(["regular", "medium", "semi-bold", "bold"]),
-  color: PropTypes.oneOf(["primary", "secondary", "accent"]),
+  color: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf(["primary", "secondary", "accent", "accentSecondary"]),
+  ]),
   variant: PropTypes.oneOf(["h1", "h2", "h3", "h4"]),
   fontSize: PropTypes.number,
   onPress: PropTypes.func,
