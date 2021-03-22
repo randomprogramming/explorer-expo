@@ -17,7 +17,7 @@ const AddLocationMainScreen = ({ navigation }) => {
     setShouldShowCamera(false);
   }
 
-  function handleCancel() {
+  function handleCancelButtonPress() {
     setShouldShowCamera(false);
   }
 
@@ -29,7 +29,7 @@ const AddLocationMainScreen = ({ navigation }) => {
         onPictureTaken={handlePictureTaken}
         // If there is media loaded, we want to show the cancel button, which only hides the camera and goes back to the
         // add location information
-        onCancelPress={media.length === 0 ? undefined : handleCancel}
+        onCancelPress={media.length === 0 ? undefined : handleCancelButtonPress}
         onBackButtonPress={navigation.goBack}
       />
     );
