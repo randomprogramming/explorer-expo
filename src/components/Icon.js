@@ -1,10 +1,20 @@
 import React from "react";
-import Svg, { Path } from "react-native-svg";
+import Svg, { Path, Circle } from "react-native-svg";
 import PropTypes from "prop-types";
 import Typography from "./Typography";
 
 const Icon = ({ name, size, color }) => {
   switch (name) {
+    case "camera":
+      return (
+        <Svg viewBox="0 0 307.308 307.308" height={size} width={size}>
+          <Path
+            fill={color}
+            d="M284.909 66.146h-81.345l-16.426-27.595a8.908 8.908 0 00-7.654-4.351h-51.662a8.907 8.907 0 00-7.654 4.351l-16.426 27.595H77.049v-6.082a8.907 8.907 0 00-8.907-8.907H35.185a8.907 8.907 0 00-8.907 8.907v6.082h-3.88C10.027 66.146 0 76.174 0 88.543v162.166c0 12.37 10.027 22.398 22.397 22.398h262.512c12.37 0 22.398-10.028 22.398-22.398V88.543c.001-12.369-10.028-22.397-22.398-22.397zM153.653 233.379c-35.21 0-63.753-28.543-63.753-63.754 0-35.209 28.543-63.753 63.753-63.753s63.753 28.544 63.753 63.753c0 35.211-28.543 63.754-63.753 63.754zm117.282-121.057h-27.91a8.907 8.907 0 01-8.907-8.908 8.907 8.907 0 018.907-8.908h27.91a8.907 8.907 0 018.908 8.908 8.908 8.908 0 01-8.908 8.908z"
+          />
+          <Circle fill={color} cx={153.653} cy={169.625} r={44.538} />
+        </Svg>
+      );
     case "avatar":
       return (
         <Svg viewBox="-42 0 512 512.002" height={size} width={size}>
@@ -70,7 +80,15 @@ const Icon = ({ name, size, color }) => {
 };
 
 Icon.propTypes = {
-  name: PropTypes.oneOf(["back", "home", "map", "plus", "heart", "avatar"]),
+  name: PropTypes.oneOf([
+    "back",
+    "home",
+    "map",
+    "plus",
+    "heart",
+    "avatar",
+    "camera",
+  ]),
   size: PropTypes.number,
   color: PropTypes.string,
 };
