@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from "react";
 import { TextInput, StyleSheet } from "react-native";
 import pxGenerator from "../helpers/pxGenerator";
 import useTheme from "../hooks/useTheme";
-import { SEMI_BOLD_FF } from "./Typography";
+import { MEDIUM_FF } from "./Typography";
 import PropTypes from "prop-types";
 
-const FONT_FAMILY = SEMI_BOLD_FF;
+const FONT_FAMILY = MEDIUM_FF;
 
 const CustomTextInput = ({
   value,

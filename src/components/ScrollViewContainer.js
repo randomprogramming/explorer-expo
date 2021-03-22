@@ -17,6 +17,7 @@ const ScrollViewContainer = ({
   useKeyboardAvoidView,
   keyboardAvoidViewBehavior,
   defaultPadding,
+  headerTitle,
 }) => {
   const theme = useTheme();
 
@@ -36,7 +37,9 @@ const ScrollViewContainer = ({
       behavior={getBehavior()}
     >
       <ScrollView contentContainerStyle={styles.flexGrow}>
-        <Container defaultPadding={defaultPadding}>{children}</Container>
+        <Container defaultPadding={defaultPadding} headerTitle={headerTitle}>
+          {children}
+        </Container>
       </ScrollView>
     </KeyboardAvoidingView>
   ) : (
@@ -48,7 +51,9 @@ const ScrollViewContainer = ({
       ]}
       refreshControl={refreshControl}
     >
-      <Container defaultPadding={defaultPadding}>{children}</Container>
+      <Container defaultPadding={defaultPadding} headerTitle={headerTitle}>
+        {children}
+      </Container>
     </ScrollView>
   );
 };
@@ -61,6 +66,7 @@ ScrollViewContainer.propTypes = {
   keyboardAvoidViewBehavior: PropTypes.oneOf(["padding", "height", "position"]),
   refreshControl: PropTypes.node,
   defaultPadding: PropTypes.bool,
+  headerTitle: PropTypes.string,
 };
 
 const styles = StyleSheet.create({

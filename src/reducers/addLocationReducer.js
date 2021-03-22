@@ -13,9 +13,12 @@ const addLocationSlice = createSlice({
     appendMediaToState(state, action) {
       state.media.push(action.payload);
     },
+    setTitle(state, action) {
+      state.title = action.payload;
+    },
   },
 });
 
-export const { appendMediaToState } = addLocationSlice.actions;
+export const { appendMediaToState, setTitle } = addLocationSlice.actions;
 
 export default addLocationSlice.reducer;
