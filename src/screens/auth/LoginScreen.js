@@ -6,7 +6,6 @@ import styles from "./styles";
 import Link from "../../components/Link";
 import BigButton from "../../components/BigButton";
 import { useDispatch, useSelector } from "react-redux";
-import useTheme from "../../hooks/useTheme";
 import { handleLogin } from "../../actions/personActions";
 import { REGISTER_SCREEN } from "../../routers/NoAuthRouter/names";
 import ScrollViewContainer from "../../components/ScrollViewContainer";
@@ -17,6 +16,7 @@ const password = "password";
 const FIELD_MARGIN = 6;
 
 const LoginScreen = ({ navigation }) => {
+  // TODO: Put this in redux state
   const [loginData, setLoginData] = useState({
     [username]: "",
     [password]: "",
@@ -32,8 +32,6 @@ const LoginScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  const theme = useTheme();
-
   const handleDataChange = (newValue, name) => {
     // newValue is the new value after data changed
     // name is the name of the field that we want to mutate
@@ -44,17 +42,23 @@ const LoginScreen = ({ navigation }) => {
     dispatch(handleLogin(loginData));
   };
 
+  function shouldDisableLoginButton() {
+    return loginData.username.length === 0 || loginData.password.length === 0;
+  }
+
   return (
-    <ScrollViewContainer defaultPadding useKeyboardAvoidView>
-      <Typography variant="h2">Let's get you signed in</Typography>
+    <ScrollViewContainer
+      defaultPadding
+      useKeyboardAvoidView
+      headerTitle="Let's get you signed in"
+    >
       <Typography>
         Sign in to get access to features such as adding your own locations,
         liking other peoples locations and many more!
       </Typography>
       <View style={styles.flexGrow}>
         <CustomTextInput
-          placeholder="Email"
-          keyboardType="email-address"
+          placeholder="Username"
           autoCapitalize="none"
           value={loginData.email}
           onChange={(newValue) => handleDataChange(newValue, username)}
@@ -80,7 +84,7 @@ const LoginScreen = ({ navigation }) => {
       </View>
 
       <BigButton
-        disabled={isFetchingLoginData}
+        disabled={isFetchingLoginData || shouldDisableLoginButton()}
         title="Sign In"
         onPress={handleLoginPress}
       />

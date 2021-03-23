@@ -5,8 +5,7 @@ import Typography from "../../components/Typography";
 
 function NoAuthScreen({ navigation, route }) {
   return (
-    <Container defaultPadding>
-      <Typography variant="h1">{route.params.noAuthScreenTitle}</Typography>
+    <Container defaultPadding headerTitle={route.params.noAuthScreenTitle}>
       <Typography>{route.params.noAuthScreenText}</Typography>
       <BigButton
         isSmall

@@ -4,6 +4,7 @@ import * as names from "./names";
 import LoginScreen from "../../screens/auth/LoginScreen";
 import NoAuthScreen from "../../screens/NoAuthScreen";
 import PropTypes from "prop-types";
+import RegisterScreen from "../../screens/auth/RegisterScreen";
 
 const Stack = createStackNavigator();
 
@@ -20,8 +21,7 @@ const NoAuthRouter = ({ noAuthScreenTitle, noAuthScreenText }) => {
         }}
       />
       <Stack.Screen name={names.LOGIN_SCREEN} component={LoginScreen} />
-      <Stack.Screen name={names.REGISTER_SCREEN} component={LoginScreen} />
-      {/* TODO: Add the actual register screen */}
+      <Stack.Screen name={names.REGISTER_SCREEN} component={RegisterScreen} />
     </Stack.Navigator>
   );
 };
