@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { View, Image, Dimensions, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import Typography from "../../components/Typography";
 import { useSelector, useDispatch } from "react-redux";
 import Camera from "../../components/Camera";
@@ -48,6 +54,8 @@ const AddLocationMainScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const theme = useTheme();
+
+  const mapRef = useRef();
 
   function handlePictureTaken(photo) {
     dispatch(appendMediaToState(photo));
@@ -106,6 +114,30 @@ const AddLocationMainScreen = ({ navigation }) => {
     }
   }, [activeSwitchComponent]);
 
+  useEffect(() => {
+    // Since android doesn't have a prop to follow the users location,
+    // this code will automatically zoom to the users location
+    // every time they select the 'use current position' option
+    if (
+      Platform.OS === "android" &&
+      activeSwitchComponent === CURRENT_LOCATION &&
+      hasLocationPermission
+    ) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        mapRef.current.animateCamera(
+          {
+            center: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            },
+            zoom: 16,
+          },
+          { duration: 1500 }
+        );
+      });
+    }
+  }, [activeSwitchComponent]);
+
   // TODO: Add an animation for the camera sliding out of the screen
   // If the media is empty, we want the user to take a picture before they can proceed to the next screen
   if (media.length === 0 || shouldShowCamera) {
@@ -122,7 +154,8 @@ const AddLocationMainScreen = ({ navigation }) => {
 
   // Take the height and width of the first image and use it as reference aspect ratio for the rest of the images
   const aspectRatio = media[0].height / media[0].width;
-  const imageRatio = 2.7;
+  // const aspectRatio = 1.5; // TODO: Remove this, its only for testing purposes
+  const imageRatio = 2.6;
 
   return (
     <ScrollViewContainer
@@ -195,18 +228,19 @@ const AddLocationMainScreen = ({ navigation }) => {
         <View style={[styles.shadow, styles.borderRadius]}>
           <View style={[styles.mapContainer, styles.borderRadius]}>
             <MapView
-              provider={undefined}
+              ref={mapRef}
               showsMyLocationButton={hasLocationPermission}
               showsScale={false}
               style={{
                 flex: 1,
-                minHeight: Dimensions.get("window").height / 3,
+                minHeight: Dimensions.get("window").height / imageRatio,
               }}
               onPress={(event) => handleMapPress(event.nativeEvent.coordinate)}
               onUserLocationChange={(event) =>
                 setCurrentUserLocation(event.nativeEvent.coordinate)
               }
               showsUserLocation={hasLocationPermission}
+              followsUserLocation={activeSwitchComponent === CURRENT_LOCATION}
             >
               {/* Only show the marker when the user is on manual mode */}
               {selectedLongitude &&

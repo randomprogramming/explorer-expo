@@ -41,7 +41,7 @@ const AddLocationRouter = ({ navigation }) => {
     }
   }, []);
 
-  return !isLoggedIn ? (
+  return isLoggedIn ? (
     <MainAddLocationRouter />
   ) : (
     <NoAuthRouter

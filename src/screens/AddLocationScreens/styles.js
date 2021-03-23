@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    paddingHorizontal: pxGenerator(2),
   },
   imagesAndButtonCommon: {
     marginTop: pxGenerator(4),

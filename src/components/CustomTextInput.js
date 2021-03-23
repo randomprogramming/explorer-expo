@@ -38,7 +38,7 @@ const CustomTextInput = ({
         styles.main,
         marginTop && { marginTop: pxGenerator(marginTop) },
         {
-          backgroundColor: theme.background.primary[0],
+          backgroundColor: theme.background.primary[1],
           borderColor: theme.accent.secondary,
           color: theme.text.primary,
         },
