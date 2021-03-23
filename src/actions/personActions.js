@@ -8,8 +8,6 @@ import {
   setUsername,
 } from "../reducers/personReducer";
 
-export const SET_LOGGED_IN = "SET_LOGGED_IN";
-
 export function handleLogin(loginData) {
   return async (dispatch) => {
     // If the login data is not defined, don't make a request

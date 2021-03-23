@@ -34,7 +34,8 @@ const CameraComponent = ({
     console.log("Trying to take picture...");
     try {
       if (cameraRef.current && isCameraReady) {
-        let photo = await cameraRef.current.takePictureAsync();
+        // TODO: Implement compressing and post processing
+        let photo = await cameraRef.current.takePictureAsync({ quality: 1 });
         console.log("Photo taken.");
         if (onPictureTaken) {
           onPictureTaken(photo);

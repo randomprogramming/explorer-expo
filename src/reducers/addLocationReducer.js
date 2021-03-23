@@ -7,6 +7,7 @@ const initialState = {
   // These are the selected coordinates, if user is using 'Use current location' option, we ignore these
   selectedLatitude: undefined,
   selectedLongitude: undefined,
+  isUploadingLocation: false,
 };
 
 const addLocationSlice = createSlice({
@@ -32,6 +33,14 @@ const addLocationSlice = createSlice({
         state.selectedLongitude = longitude;
       }
     },
+    wipeState(state) {
+      state = initialState;
+    },
+    setIsUploadingLocation(state, action) {
+      if (typeof action.payload === "boolean") {
+        state.isUploadingLocation = action.payload;
+      }
+    },
   },
 });
 
@@ -39,6 +48,8 @@ export const {
   appendMediaToState,
   setTitle,
   setCoordinates,
+  wipeState,
+  setIsUploadingLocation,
 } = addLocationSlice.actions;
 
 export default addLocationSlice.reducer;

@@ -17,6 +17,8 @@ import CustomTextInput from "../../components/CustomTextInput";
 import ScrollViewContainer from "../../components/ScrollViewContainer";
 import MapView, { Marker } from "react-native-maps";
 import Switch from "../../components/Switch";
+import BigButton from "../../components/BigButton";
+import { handleAddLocation } from "../../actions/addLocationActions";
 
 const ENTER_MANUALLY = "ENTER_MANUALLY_KEY";
 const CURRENT_LOCATION = "USE_CURRENT_LOCATION_KEY";
@@ -33,6 +35,9 @@ const AddLocationMainScreen = ({ navigation }) => {
   );
   const selectedLongitude = useSelector(
     (state) => state.addLocation.selectedLongitude
+  );
+  const isUploadingLocation = useSelector(
+    (state) => state.addLocation.isUploadingLocation
   );
 
   const [activeSwitchComponent, setActiveSwitchComponent] = useState(null);
@@ -54,6 +59,19 @@ const AddLocationMainScreen = ({ navigation }) => {
   function handleMapPress(coordinates) {
     if (activeSwitchComponent === ENTER_MANUALLY) {
       dispatch(setCoordinates(coordinates));
+    }
+  }
+
+  function handleAddLocationPress() {
+    dispatch(handleAddLocation());
+  }
+
+  function isLocationSelected() {
+    if (activeSwitchComponent === ENTER_MANUALLY) {
+      return selectedLongitude && selectedLongitude;
+    } else {
+      // TODO: Figure out what to do when automatic location is selected
+      return true;
     }
   }
 
@@ -85,7 +103,7 @@ const AddLocationMainScreen = ({ navigation }) => {
       <View style={styles.mediaContainer}>
         {media.map((picture) => {
           return (
-            <View style={styles.shadow}>
+            <View key={picture.uri} style={styles.shadow}>
               <Image
                 source={{ uri: picture.uri }}
                 style={[
@@ -148,7 +166,6 @@ const AddLocationMainScreen = ({ navigation }) => {
           <View style={[styles.mapContainer, styles.borderRadius]}>
             <MapView
               provider={undefined}
-              showsCompass={false}
               showsMyLocationButton={true}
               showsScale={false}
               style={{
@@ -170,6 +187,14 @@ const AddLocationMainScreen = ({ navigation }) => {
             </MapView>
           </View>
         </View>
+      </View>
+      <View>
+        <BigButton
+          title="Add Location"
+          onPress={handleAddLocationPress}
+          // if the location is being uploaded or there is no location selected on the map, disable the button
+          disabled={isUploadingLocation || !isLocationSelected()}
+        />
       </View>
     </ScrollViewContainer>
   );
