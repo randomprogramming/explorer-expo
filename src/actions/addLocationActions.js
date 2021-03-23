@@ -6,7 +6,7 @@ import {
   wipeState,
 } from "../reducers/addLocationReducer";
 
-export function handleAddLocation(currentLatitude, currentLongitude) {
+export function handleAddLocation(coordinates) {
   return async (dispatch, getState) => {
     const {
       title,
@@ -21,13 +21,12 @@ export function handleAddLocation(currentLatitude, currentLongitude) {
 
     // If we got some coordinated provided, use them instead of the selected ones
     if (
-      currentLatitude &&
-      currentLongitude &&
-      typeof currentLatitude === "number" &&
-      typeof currentLongitude === "number"
+      coordinates &&
+      typeof coordinates.latitude === "number" &&
+      typeof coordinates.longitude === "number"
     ) {
-      data.append("latitude", currentLatitude);
-      data.append("longitude", currentLongitude);
+      data.append("latitude", coordinates.latitude);
+      data.append("longitude", coordinates.longitude);
     } else {
       if (
         typeof selectedLongitude === "number" &&

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Image, Dimensions, TouchableOpacity } from "react-native";
 import Typography from "../../components/Typography";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,7 +8,6 @@ import {
   setCoordinates,
   setTitle,
 } from "../../reducers/addLocationReducer";
-import Container from "../../components/Container";
 import styles from "./styles";
 import pxGenerator from "../../helpers/pxGenerator";
 import useTheme from "../../hooks/useTheme";
@@ -19,6 +18,7 @@ import MapView, { Marker } from "react-native-maps";
 import Switch from "../../components/Switch";
 import BigButton from "../../components/BigButton";
 import { handleAddLocation } from "../../actions/addLocationActions";
+import * as Permissions from "expo-permissions";
 
 const ENTER_MANUALLY = "ENTER_MANUALLY_KEY";
 const CURRENT_LOCATION = "USE_CURRENT_LOCATION_KEY";
@@ -42,6 +42,8 @@ const AddLocationMainScreen = ({ navigation }) => {
 
   const [activeSwitchComponent, setActiveSwitchComponent] = useState(null);
   const [shouldShowCamera, setShouldShowCamera] = useState(true);
+  const [currentUserLocation, setCurrentUserLocation] = useState(null);
+  const [hasLocationPermission, setHasLocationPermission] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -63,35 +65,63 @@ const AddLocationMainScreen = ({ navigation }) => {
   }
 
   function handleAddLocationPress() {
-    dispatch(handleAddLocation());
+    if (activeSwitchComponent === ENTER_MANUALLY) {
+      dispatch(handleAddLocation());
+    } else {
+      dispatch(handleAddLocation(currentUserLocation));
+    }
   }
 
   function isLocationSelected() {
     if (activeSwitchComponent === ENTER_MANUALLY) {
       return selectedLongitude && selectedLongitude;
     } else {
-      // TODO: Figure out what to do when automatic location is selected
-      return true;
+      return (
+        currentUserLocation &&
+        currentUserLocation.latitude &&
+        currentUserLocation.longitude
+      );
     }
   }
 
+  async function getLocationPermissionStatus() {
+    const locationPerm = await Permissions.getAsync(Permissions.LOCATION);
+    setHasLocationPermission(locationPerm.granted);
+  }
+
+  async function askForLocationPermission() {
+    // TODO: Disable the 'use current location' button if the location isn't granted
+    await Permissions.askAsync(Permissions.LOCATION);
+    await getLocationPermissionStatus();
+  }
+
+  useEffect(() => {
+    // on component mount, check the location perms
+    getLocationPermissionStatus();
+  }, []);
+
+  useEffect(() => {
+    if (activeSwitchComponent === CURRENT_LOCATION && !hasLocationPermission) {
+      askForLocationPermission();
+    }
+  }, [activeSwitchComponent]);
+
   // TODO: Add an animation for the camera sliding out of the screen
   // If the media is empty, we want the user to take a picture before they can proceed to the next screen
-  // if (media.length === 0 || shouldShowCamera) {
-  //   return (
-  //     <Camera
-  //       onPictureTaken={handlePictureTaken}
-  //       // If there is media loaded, we want to show the cancel button, which only hides the camera and goes back to the
-  //       // add location information
-  //       onCancelPress={media.length === 0 ? undefined : handleCancelButtonPress}
-  //       onBackButtonPress={navigation.goBack}
-  //     />
-  //   );
-  // }
+  if (media.length === 0 || shouldShowCamera) {
+    return (
+      <Camera
+        onPictureTaken={handlePictureTaken}
+        // If there is media loaded, we want to show the cancel button, which only hides the camera and goes back to the
+        // add location information
+        onCancelPress={media.length === 0 ? undefined : handleCancelButtonPress}
+        onBackButtonPress={navigation.goBack}
+      />
+    );
+  }
 
   // Take the height and width of the first image and use it as reference aspect ratio for the rest of the images
-  // const aspectRatio = media[0].height / media[0].width;
-  const aspectRatio = 1.5; // TODO: Remove this, its just for testing
+  const aspectRatio = media[0].height / media[0].width;
   const imageRatio = 2.7;
 
   return (
@@ -161,19 +191,24 @@ const AddLocationMainScreen = ({ navigation }) => {
           onChange={setActiveSwitchComponent}
         />
         {/* TODO: read the docs for mapview, NSLocationWhenInUseUsageDescription has to be added and some api keys or smthing */}
-        {/* Excuse the mess here, we have to use overflow: hidden, but iOS doesnt like when you use overflow with shadows */}
+        {/* Excuse the mess here, we have to use overflow: hidden, but iOS doesn't like when you use overflow with shadows */}
         <View style={[styles.shadow, styles.borderRadius]}>
           <View style={[styles.mapContainer, styles.borderRadius]}>
             <MapView
               provider={undefined}
-              showsMyLocationButton={true}
+              showsMyLocationButton={hasLocationPermission}
               showsScale={false}
               style={{
                 flex: 1,
                 minHeight: Dimensions.get("window").height / 3,
               }}
               onPress={(event) => handleMapPress(event.nativeEvent.coordinate)}
+              onUserLocationChange={(event) =>
+                setCurrentUserLocation(event.nativeEvent.coordinate)
+              }
+              showsUserLocation={hasLocationPermission}
             >
+              {/* Only show the marker when the user is on manual mode */}
               {selectedLongitude &&
                 selectedLatitude &&
                 activeSwitchComponent === ENTER_MANUALLY && (
@@ -193,7 +228,9 @@ const AddLocationMainScreen = ({ navigation }) => {
           title="Add Location"
           onPress={handleAddLocationPress}
           // if the location is being uploaded or there is no location selected on the map, disable the button
-          disabled={isUploadingLocation || !isLocationSelected()}
+          disabled={
+            media.length === 0 || isUploadingLocation || !isLocationSelected()
+          }
         />
       </View>
     </ScrollViewContainer>
