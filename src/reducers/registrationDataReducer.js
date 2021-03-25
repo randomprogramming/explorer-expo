@@ -15,35 +15,33 @@ const registrationDataSlice = createSlice({
   name: "registrationData",
   initialState,
   reducers: {
-    setUsername(state, action) {
+    wipeState: () => initialState,
+    setUsername: (state, action) => {
       if (typeof action.payload === "string") {
         state.username = action.payload;
       }
     },
-    setEmail(state, action) {
+    setEmail: (state, action) => {
       if (typeof action.payload === "string") {
         state.email = action.payload;
       }
     },
-    setPassword(state, action) {
+    setPassword: (state, action) => {
       if (typeof action.payload === "string") {
         state.password = action.payload;
       }
     },
-    setRepeatedPassword(state, action) {
+    setRepeatedPassword: (state, action) => {
       if (typeof action.payload === "string") {
         state.repeatedPassword = action.payload;
       }
     },
-    wipeState(state) {
-      state = initialState;
-    },
-    setIsCreatingAccount(state, action) {
+    setIsCreatingAccount: (state, action) => {
       if (typeof action.payload === "boolean") {
         state.isCreatingAccount = action.payload;
       }
     },
-    setRequestStatus(state, action) {
+    setRequestStatus: (state, action) => {
       state.statusCode = action.payload.statusCode;
       state.statusText = action.payload.statusText;
     },

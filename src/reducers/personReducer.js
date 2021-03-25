@@ -18,10 +18,8 @@ const personSlice = createSlice({
   name: "person",
   initialState,
   reducers: {
-    setInitialState(state) {
-      state = initialState;
-    },
-    setLoggedInStatus(state, action) {
+    setInitialState: () => initialState,
+    setLoggedInStatus: (state, action) => {
       const newState = action.payload;
 
       if (typeof newState !== "boolean") {
@@ -30,19 +28,21 @@ const personSlice = createSlice({
         state.isLoggedIn = newState;
       }
     },
-    startFetchingLoginData(state) {
+    startFetchingLoginData: (state) => {
       state.isFetchingLoginData = true;
     },
-    stopFetchingLoginData(state) {
+    stopFetchingLoginData: (state) => {
       state.isFetchingLoginData = false;
     },
-    setToken(state, action) {
-      state.token = action.payload;
+    setToken: (state, action) => {
+      if (typeof action.payload === "string") {
+        state.token = action.payload;
+      }
     },
-    setUser(state, action) {
-      state = { ...state, ...action.payload };
+    setUser: (state, action) => {
+      return { ...state, ...action.payload };
     },
-    setOnLoginSuccess(state, action) {
+    setOnLoginSuccess: (state, action) => {
       state.onLoginSuccess = action.payload;
     },
   },

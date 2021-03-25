@@ -14,13 +14,14 @@ const addLocationSlice = createSlice({
   name: "addLocation",
   initialState,
   reducers: {
-    appendMediaToState(state, action) {
+    wipeState: () => initialState,
+    appendMediaToState: (state, action) => {
       state.media.push(action.payload);
     },
-    setTitle(state, action) {
+    setTitle: (state, action) => {
       state.title = action.payload;
     },
-    setCoordinates(state, action) {
+    setCoordinates: (state, action) => {
       const { latitude, longitude } = action.payload;
 
       if (
@@ -33,10 +34,7 @@ const addLocationSlice = createSlice({
         state.selectedLongitude = longitude;
       }
     },
-    wipeState(state) {
-      state = initialState;
-    },
-    setIsUploadingLocation(state, action) {
+    setIsUploadingLocation: (state, action) => {
       if (typeof action.payload === "boolean") {
         state.isUploadingLocation = action.payload;
       }

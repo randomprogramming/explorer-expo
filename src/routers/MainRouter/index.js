@@ -1,9 +1,9 @@
 import React from "react";
+import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as names from "./names";
 import DiscoverScreen from "../../screens/DiscoverScreen";
 import useTheme from "../../hooks/useTheme";
-import { Foundation } from "@expo/vector-icons";
 import MapScreen from "../../screens/MapScreen";
 import LikedLocationsScreen from "../../screens/LikedLocationsScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
@@ -16,6 +16,9 @@ const Tab = createBottomTabNavigator();
 
 const MainRouter = () => {
   const isLoggedIn = useSelector((state) => state.person.isLoggedIn);
+  const profilePictureUrl = useSelector(
+    (state) => state.person.profilePictureUrl
+  );
   const iconSize = useSelector((state) => state.appState.bottomTabBarIconSize);
 
   const theme = useTheme();
@@ -37,9 +40,14 @@ const MainRouter = () => {
             case names.LIKED_LOCATIONS_SCREEN:
               return <Icon name="heart" size={iconSize} color={clr} />;
             case names.SETTINGS_SCREEN:
-              return isLoggedIn ? (
+              return isLoggedIn && profilePictureUrl ? (
                 // TODO: Change this with users actual picture
-                <Foundation name="heart" size={iconSize} color={clr} />
+                <Image
+                  source={{
+                    uri: profilePictureUrl,
+                  }}
+                  style={{ height: iconSize, width: iconSize }}
+                />
               ) : (
                 <Icon name="heart" size={iconSize} color={clr} />
               );
