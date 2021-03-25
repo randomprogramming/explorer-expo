@@ -46,10 +46,16 @@ const MainRouter = () => {
                   source={{
                     uri: profilePictureUrl,
                   }}
-                  style={{ height: iconSize, width: iconSize }}
+                  style={{
+                    height: iconSize,
+                    width: iconSize,
+                    borderRadius: iconSize,
+                    borderColor: clr,
+                    borderWidth: 1,
+                  }}
                 />
               ) : (
-                <Icon name="heart" size={iconSize} color={clr} />
+                <Icon name="avatar" size={iconSize} color={clr} />
               );
             default:
               console.log(

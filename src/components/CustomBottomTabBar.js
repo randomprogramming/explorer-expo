@@ -11,6 +11,8 @@ import posed from "react-native-pose";
 import useIsKeyboardShown from "../hooks/useIsKeyboardShown";
 import { useSelector } from "react-redux";
 
+// TODO: Get better names for this, make a bit easier to understand and maybe make the slider
+// slightly wider
 const windowWidth = Dimensions.get("window").width;
 const tabWidth = windowWidth / 5;
 const sliderWidth = tabWidth / 3;
