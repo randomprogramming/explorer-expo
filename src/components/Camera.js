@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, TouchableOpacity, Pressable } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+  Dimensions,
+} from "react-native";
 import * as Permissions from "expo-permissions";
 import { Camera } from "expo-camera";
 import { useDispatch } from "react-redux";
@@ -14,6 +20,8 @@ import PropTypes from "prop-types";
 import Icon from "./Icon";
 
 const CANCEL_TEXT_SIZE = 20;
+const TAKE_PICTURE_BUTTON_SIZE = 60;
+const BOTTOM_BAR_ICON_SIZE = 28;
 
 const CameraComponent = ({
   onPictureTaken,
@@ -22,7 +30,8 @@ const CameraComponent = ({
 }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [useBackCamera, setUseBackCamera] = useState(true);
+  const [useFlash, setUseFlash] = useState(false);
 
   const cameraRef = useRef();
 
@@ -35,7 +44,8 @@ const CameraComponent = ({
     try {
       if (cameraRef.current && isCameraReady) {
         // TODO: Implement compressing and post processing
-        let photo = await cameraRef.current.takePictureAsync({ quality: 1 });
+        // TODO: change the quality, 0.01 is just for testing so that uploading doesnt take a long time
+        let photo = await cameraRef.current.takePictureAsync({ quality: 0.01 });
         console.log("Photo taken.");
         if (onPictureTaken) {
           onPictureTaken(photo);
@@ -94,6 +104,16 @@ const CameraComponent = ({
         style={styles.camera}
         ref={cameraRef}
         onCameraReady={() => setIsCameraReady(true)}
+        type={
+          useBackCamera
+            ? Camera.Constants.Type.back
+            : Camera.Constants.Type.front
+        }
+        flashMode={
+          useFlash
+            ? Camera.Constants.FlashMode.on
+            : Camera.Constants.FlashMode.off
+        }
       >
         <View style={styles.topButtonsContainer}>
           <View>
@@ -123,13 +143,55 @@ const CameraComponent = ({
         </View>
       </Camera>
       <View style={styles.bottomBarContainer}>
-        <TouchableOpacity
+        <View
           style={[
-            styles.takePictureButton,
-            { backgroundColor: theme.accent.primary },
+            styles.bottomBarItemContainer,
+            { width: Dimensions.get("window").width / 3 },
           ]}
-          onPress={handleTakePicturePress}
-        ></TouchableOpacity>
+        >
+          <TouchableOpacity onPress={() => setUseFlash(!useFlash)}>
+            <Icon
+              name="flash"
+              size={BOTTOM_BAR_ICON_SIZE}
+              color={useFlash ? theme.accent.primary : theme.common.white}
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[
+            styles.bottomBarItemContainer,
+            { width: Dimensions.get("window").width / 3 },
+          ]}
+        >
+          <TouchableOpacity
+            style={[
+              styles.takePictureButtonOuter,
+              { borderColor: theme.accent.primary },
+            ]}
+            onPress={handleTakePicturePress}
+          >
+            <View
+              style={[
+                styles.takePictureButtonInner,
+                { backgroundColor: theme.accent.primary },
+              ]}
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[
+            styles.bottomBarItemContainer,
+            { width: Dimensions.get("window").width / 3 },
+          ]}
+        >
+          <TouchableOpacity onPress={() => setUseBackCamera(!useBackCamera)}>
+            <Icon
+              name="reverse-camera"
+              size={BOTTOM_BAR_ICON_SIZE}
+              color="white"
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -154,13 +216,22 @@ const styles = StyleSheet.create({
   bottomBarContainer: {
     paddingVertical: pxGenerator(10),
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "space-around",
   },
-  takePictureButton: {
-    height: 60,
-    width: 60,
-    borderRadius: 60,
+  bottomBarItemContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  takePictureButtonOuter: {
+    padding: pxGenerator(1),
+    borderWidth: 2,
+    borderRadius: TAKE_PICTURE_BUTTON_SIZE,
+  },
+  takePictureButtonInner: {
+    height: TAKE_PICTURE_BUTTON_SIZE,
+    width: TAKE_PICTURE_BUTTON_SIZE,
+    borderRadius: TAKE_PICTURE_BUTTON_SIZE,
   },
   topButtonsContainer: {
     backgroundColor: "transparent",

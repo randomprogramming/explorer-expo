@@ -16,6 +16,8 @@ export function handleAddLocation(coordinates) {
     } = getState().addLocation;
     dispatch(setIsUploadingLocation(true));
 
+    const token = getState().person.token;
+
     const data = new FormData();
     data.append("title", title);
 
@@ -57,6 +59,9 @@ export function handleAddLocation(coordinates) {
         url: ADD_LOCATION_URL,
         method: "POST",
         data,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
 
       if (response.status === "200") {
