@@ -5,7 +5,8 @@ import {
   stopFetchingLoginData,
   setToken,
   setInitialState,
-  setUsername,
+  setUser,
+  setLoggedInStatus,
 } from "../reducers/personReducer";
 
 export function handleLogin(loginData) {
@@ -24,8 +25,9 @@ export function handleLogin(loginData) {
       });
 
       const { token } = response.data;
-      dispatch(fetchUsernameFromToken(token, true));
+      dispatch(fetchUserFromToken(token, true));
       dispatch(setToken(token));
+      dispatch(setLoggedInStatus(true));
     } catch (err) {
       console.log("Error when fetching token:", err);
     }
@@ -34,7 +36,7 @@ export function handleLogin(loginData) {
   };
 }
 
-export function fetchUsernameFromToken(token, useOnLoginSuccessCallback) {
+export function fetchUserFromToken(token, useOnLoginSuccessCallback) {
   return async (dispatch, getState) => {
     // If we want to fetch username right after logging in,
     // The token might not be saved in the redux state yet, so we have to pass the token
@@ -57,8 +59,7 @@ export function fetchUsernameFromToken(token, useOnLoginSuccessCallback) {
         onLoginSuccess();
       }
 
-      const { username } = response.data;
-      dispatch(setUsername(username));
+      dispatch(setUser(response.data));
     } catch (err) {
       // If we get an error here, it means that the token is not valid
       dispatch(setInitialState());

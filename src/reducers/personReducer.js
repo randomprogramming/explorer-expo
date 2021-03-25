@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  id: "",
   username: "",
+  email: "",
+  profilePictureUrl: "",
+  addedLocations: [],
+
   token: "",
   isLoggedIn: false,
 
@@ -34,8 +39,8 @@ const personSlice = createSlice({
     setToken(state, action) {
       state.token = action.payload;
     },
-    setUsername(state, action) {
-      state.username = action.payload;
+    setUser(state, action) {
+      state = { ...state, ...action.payload };
     },
     setOnLoginSuccess(state, action) {
       state.onLoginSuccess = action.payload;
@@ -49,7 +54,7 @@ export const {
   stopFetchingLoginData,
   setToken,
   setInitialState,
-  setUsername,
+  setUser,
   setOnLoginSuccess,
 } = personSlice.actions;
 

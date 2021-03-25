@@ -38,7 +38,7 @@ const LoginScreen = ({ navigation }) => {
     setLoginData({ ...loginData, [name]: newValue });
   };
 
-  const handleLoginPress = async () => {
+  const handleLoginPress = () => {
     dispatch(handleLogin(loginData));
   };
 
