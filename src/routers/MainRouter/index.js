@@ -5,12 +5,12 @@ import * as names from "./names";
 import DiscoverScreen from "../../screens/DiscoverScreen";
 import useTheme from "../../hooks/useTheme";
 import MapScreen from "../../screens/MapScreen";
-import LikedLocationsScreen from "../../screens/LikedLocationsScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
 import AddLocationRouter from "../AddLocationRouter";
 import { useSelector } from "react-redux";
 import CustomBottomTabBar from "../../components/CustomBottomTabBar";
 import Icon from "../../components/Icon";
+import LikedLocationsRouter from "../LikedLocationsRouter";
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +41,6 @@ const MainRouter = () => {
               return <Icon name="heart" size={iconSize} color={clr} />;
             case names.SETTINGS_SCREEN:
               return isLoggedIn && profilePictureUrl ? (
-                // TODO: Change this with users actual picture
                 <Image
                   source={{
                     uri: profilePictureUrl,
@@ -73,7 +72,7 @@ const MainRouter = () => {
       />
       <Tab.Screen
         name={names.LIKED_LOCATIONS_SCREEN}
-        component={LikedLocationsScreen}
+        component={LikedLocationsRouter}
       />
       {/* TODO: Replace settings screen with account screen */}
       <Tab.Screen name={names.SETTINGS_SCREEN} component={SettingsScreen} />

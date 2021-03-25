@@ -99,7 +99,6 @@ const CameraComponent = ({
 
   return (
     <View style={[styles.main, { backgroundColor: theme.common.black }]}>
-      {/* TODO: Add flip and flash functionality */}
       <Camera
         style={styles.camera}
         ref={cameraRef}
