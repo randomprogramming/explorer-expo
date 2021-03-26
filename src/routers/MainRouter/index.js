@@ -2,7 +2,6 @@ import React from "react";
 import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as names from "./names";
-import DiscoverScreen from "../../screens/DiscoverScreen";
 import useTheme from "../../hooks/useTheme";
 import MapScreen from "../../screens/MapScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
@@ -11,6 +10,7 @@ import { useSelector } from "react-redux";
 import CustomBottomTabBar from "../../components/CustomBottomTabBar";
 import Icon from "../../components/Icon";
 import LikedLocationsRouter from "../LikedLocationsRouter";
+import DiscoverRouter from "../DiscoverRouter";
 
 const Tab = createBottomTabNavigator();
 
@@ -64,7 +64,7 @@ const MainRouter = () => {
         },
       })}
     >
-      <Tab.Screen name={names.DISCOVER_SCREEN} component={DiscoverScreen} />
+      <Tab.Screen name={names.DISCOVER_SCREEN} component={DiscoverRouter} />
       <Tab.Screen name={names.MAP_SCREEN} component={MapScreen} />
       <Tab.Screen
         name={names.ADD_LOCATION_SCREEN}
