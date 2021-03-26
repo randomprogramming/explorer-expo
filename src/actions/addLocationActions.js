@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADD_LOCATION_URL } from "../../apiLinks";
+import { LOCATION_URL } from "../../apiLinks";
 import { getFileNameFromPath } from "../helpers/getFileNameFromPath";
 import {
   setIsUploadingLocation,
@@ -56,7 +56,7 @@ export function handleAddLocation(coordinates) {
 
     try {
       const response = await axios({
-        url: ADD_LOCATION_URL,
+        url: LOCATION_URL,
         method: "POST",
         data,
         headers: {

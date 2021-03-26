@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
-const SearchBar = () => {
-  return <TextInput placeholder="test" />;
+// TODO: Implement prop types
+const SearchBar = ({ value, onChange }) => {
+  return <TextInput placeholder="test" value={value} onChangeText={onChange} />;
 };
 
 export default SearchBar;
