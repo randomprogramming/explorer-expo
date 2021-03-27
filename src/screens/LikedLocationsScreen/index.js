@@ -4,8 +4,10 @@ import { View, FlatList, Animated, Dimensions, StyleSheet } from "react-native";
 import Typography from "../../components/Typography";
 import Container from "../../components/Container";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
+import pxGenerator from "../../helpers/pxGenerator";
+import SearchBar from "../../components/SearchBar";
 
-const HEADER_MAX_HEIGHT = 150;
+const HEADER_MAX_HEIGHT = 140;
 const HEADER_MIN_HEIGHT = 70;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
@@ -16,20 +18,19 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: "#fff",
-    overflow: "hidden",
     zIndex: 99,
+    paddingHorizontal: pxGenerator(8),
   },
   bar: {
-    marginTop: 28,
-    height: 32,
+    marginTop: pxGenerator(4),
     position: "relative",
   },
   scrollViewContent: {
     marginTop: HEADER_MAX_HEIGHT,
   },
   row: {
+    marginVertical: 16,
     height: 300,
-    margin: 16,
     backgroundColor: "#D3D3D3",
     alignItems: "center",
     justifyContent: "center",
@@ -70,8 +71,8 @@ const Item = ({ index }) => {
 const LikedLocationsScreen = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
 
-  const headerHeight = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE + 100],
+  const headerHeightAnim = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE + pxGenerator(10)],
     outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
     extrapolate: "clamp",
   });
@@ -82,60 +83,81 @@ const LikedLocationsScreen = () => {
     extrapolate: "clamp",
   });
 
-  const topAnim = scrollY.interpolate({
+  const elevationAnim = scrollY.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [0, -60],
+    outputRange: [0, 4],
     extrapolate: "clamp",
   });
 
-  const elevationAnim = scrollY.interpolate({
+  const shadowAnim = scrollY.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [0, 10],
-    extrapolate: "extend",
+    outputRange: [0, 0.23],
+    extrapolate: "clamp",
+  });
+
+  const topPositionAnim = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, -HEADER_MIN_HEIGHT + pxGenerator(3)],
+    extrapolate: "clamp",
   });
 
   return (
-    <Container defaultPadding>
+    <Container>
       <Animated.View
         style={[
           styles.header,
-          { height: headerHeight, elevation: elevationAnim },
+          {
+            height: headerHeightAnim,
+            elevation: elevationAnim,
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: shadowAnim,
+            shadowRadius: 2.62,
+          },
         ]}
       >
-        <View style={styles.bar}>
-          <Animated.View
-            style={{ position: "relative", top: topAnim, opacity: opacityAnim }}
-          >
+        <Animated.View
+          style={[styles.bar, { position: "relative", top: topPositionAnim }]}
+        >
+          <Animated.View style={{ opacity: opacityAnim }}>
             <Typography variant="h1">Liked Locations</Typography>
           </Animated.View>
-          <Animated.View
-            style={{ position: "relative", left: 0, top: topAnim }}
+          <View
+            style={{
+              height: HEADER_MIN_HEIGHT,
+              position: "relative",
+              marginTop: pxGenerator(1.5),
+            }}
           >
-            <TextInput
-              style={{
-                backgroundColor: "#f8f6f6",
-                borderRadius: 60,
-                width: Dimensions.get("window").width - 100,
-                paddingVertical: 15,
-              }}
-            />
-          </Animated.View>
-        </View>
+            <SearchBar />
+          </View>
+        </Animated.View>
       </Animated.View>
-      <ScrollView
+
+      <FlatList
+        data={DATA}
+        renderItem={() => <Item />}
         style={{ flex: 1 }}
         scrollEventThrottle={16}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: false }
         )}
-      >
-        <View style={styles.scrollViewContent}>
-          {DATA.map(() => (
-            <Item />
-          ))}
-        </View>
-      </ScrollView>
+        contentContainerStyle={{
+          marginTop: HEADER_MAX_HEIGHT,
+          paddingHorizontal: pxGenerator(8),
+        }}
+        ListFooterComponent={() => (
+          // Without this, the content renders under the bottom navigation bar
+          // With this, the scroller on android doesn't reach all the way to the bottom
+          // even though it does show the content correctly
+          // should get fixed at some point soon
+          <View style={{ marginBottom: HEADER_MAX_HEIGHT }} />
+        )}
+      />
     </Container>
   );
 };

@@ -1,11 +1,22 @@
 import React, { useEffect, useRef } from "react";
-import { TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet, ViewPropTypes } from "react-native";
 import pxGenerator from "../helpers/pxGenerator";
 import useTheme from "../hooks/useTheme";
 import { MEDIUM_FF } from "./Typography";
 import PropTypes from "prop-types";
 
 const FONT_FAMILY = MEDIUM_FF;
+
+export const DEFAULT_SHADOW_STYLE = {
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
+};
 
 const CustomTextInput = ({
   value,
@@ -16,6 +27,8 @@ const CustomTextInput = ({
   autoCapitalize,
   autoCorrect,
   marginTop,
+  style,
+  disableShadow,
 }) => {
   let ref = useRef();
 
@@ -37,11 +50,13 @@ const CustomTextInput = ({
       style={[
         styles.main,
         marginTop && { marginTop: pxGenerator(marginTop) },
+        !disableShadow && DEFAULT_SHADOW_STYLE,
         {
           backgroundColor: theme.background.primary[1],
           borderColor: theme.accent.secondary,
           color: theme.text.primary,
         },
+        style,
       ]}
       value={value}
       onChangeText={onChange && ((e) => onChange(e))}
@@ -68,6 +83,8 @@ CustomTextInput.propTypes = {
   autoCapitalize: TextInput.propTypes.autoCapitalize,
   autoCorrect: PropTypes.bool,
   marginTop: PropTypes.number,
+  style: ViewPropTypes.style,
+  disableShadow: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
@@ -78,13 +95,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: pxGenerator(4),
     fontSize: 17,
     fontFamily: FONT_FAMILY,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 });
