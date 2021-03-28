@@ -13,3 +13,4 @@ export const MARK_LOCATION_AS_LIKED = (locationId) => {
   }
 };
 export const LIKED_LOCATIONS_URL = LOCATION_URL + "/liked";
+export const SEARCH_REGION_FOR_LOCATIONS_URL = LOCATION_URL + "/region";

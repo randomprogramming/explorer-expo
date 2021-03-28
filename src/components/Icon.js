@@ -5,6 +5,15 @@ import Typography from "./Typography";
 
 const Icon = ({ name, size, color }) => {
   switch (name) {
+    case "markerArrow":
+      return (
+        <Svg width={size} height={size} viewBox="0 0 128 128">
+          <Path
+            fill={color}
+            d="M0 0h128L76.544 120.797c-4.091 9.604-20.997 9.604-25.088 0z"
+          />
+        </Svg>
+      );
     case "search":
       return (
         <Svg viewBox="0 0 56.966 56.966" width={size} height={size}>
@@ -135,6 +144,7 @@ Icon.propTypes = {
     "flash",
     "reverse-camera",
     "search",
+    "markerArrow",
   ]),
   size: PropTypes.number,
   color: PropTypes.string,

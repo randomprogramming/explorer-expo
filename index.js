@@ -28,6 +28,7 @@ function WithWrapper() {
 
   return (
     <NavigationContainer>
+      {/* TODO: Hide status bar when the map screen is open */}
       <StatusBar
         barStyle={isCameraActive ? "light-content" : theme.statusBarStyle}
         backgroundColor={
