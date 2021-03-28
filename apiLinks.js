@@ -12,3 +12,4 @@ export const MARK_LOCATION_AS_LIKED = (locationId) => {
     return "Error.";
   }
 };
+export const LIKED_LOCATIONS_URL = LOCATION_URL + "/liked";

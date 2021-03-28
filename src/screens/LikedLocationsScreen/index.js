@@ -1,11 +1,23 @@
-import React, { useState, useRef } from "react";
-import { View, FlatList, Animated, Dimensions, StyleSheet } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  FlatList,
+  Animated,
+  Dimensions,
+  StyleSheet,
+  RefreshControl,
+  Platform,
+} from "react-native";
 // import styles from "./styles";
 import Typography from "../../components/Typography";
 import Container from "../../components/Container";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import pxGenerator from "../../helpers/pxGenerator";
 import SearchBar from "../../components/SearchBar";
+import { useSelector, useDispatch } from "react-redux";
+import { setSearchValue } from "../../reducers/likedLocationsReducer";
+import { getLikedLocations } from "../../actions/likedLocationsActions";
+import useTheme from "../../hooks/useTheme";
 
 const HEADER_MAX_HEIGHT = 140;
 const HEADER_MIN_HEIGHT = 70;
@@ -39,30 +51,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-  },
-  {
-    id: "23212-3da1-471f-bd96-145571e29d72",
-    title: "Forth Item",
-  },
-];
+const Item = ({ index, item }) => {
+  const { title, media } = item;
 
-const Item = ({ index }) => {
   return (
     <View>
       <View style={styles.row}>
-        <Typography>Title</Typography>
+        <Typography>{title}</Typography>
       </View>
     </View>
   );
@@ -70,6 +65,18 @@ const Item = ({ index }) => {
 
 const LikedLocationsScreen = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
+
+  const searchValue = useSelector((state) => state.likedLocations.searchValue);
+  const filteredLocations = useSelector(
+    (state) => state.likedLocations.filteredLocations
+  );
+  const isFetchingData = useSelector(
+    (state) => state.likedLocations.isFetchingData
+  );
+
+  const theme = useTheme();
+
+  const dispatch = useDispatch();
 
   const headerHeightAnim = scrollY.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE + pxGenerator(10)],
@@ -100,6 +107,14 @@ const LikedLocationsScreen = () => {
     outputRange: [0, -HEADER_MIN_HEIGHT + pxGenerator(3)],
     extrapolate: "clamp",
   });
+
+  function fetchLikedLocations() {
+    dispatch(getLikedLocations());
+  }
+
+  useEffect(() => {
+    fetchLikedLocations();
+  }, []);
 
   return (
     <Container>
@@ -132,31 +147,37 @@ const LikedLocationsScreen = () => {
               marginTop: pxGenerator(1.5),
             }}
           >
-            <SearchBar />
+            <SearchBar
+              value={searchValue}
+              onChange={(newVal) => dispatch(setSearchValue(newVal))}
+            />
           </View>
         </Animated.View>
       </Animated.View>
 
       <FlatList
-        data={DATA}
-        renderItem={() => <Item />}
+        data={filteredLocations}
+        renderItem={(props) => <Item {...props} />}
         style={{ flex: 1 }}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            onRefresh={fetchLikedLocations}
+            refreshing={isFetchingData}
+            progressViewOffset={HEADER_MAX_HEIGHT}
+            progressBackgroundColor={theme.accent.primary}
+          />
+        }
+        contentInset={{ top: Platform.OS === "ios" && HEADER_MAX_HEIGHT - 40 }}
+        // contentOffset={{ x: 0, y: -HEADER_MAX_HEIGHT }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: false }
         )}
         contentContainerStyle={{
-          marginTop: HEADER_MAX_HEIGHT,
+          paddingTop: Platform.OS === "android" && HEADER_MAX_HEIGHT,
           paddingHorizontal: pxGenerator(8),
         }}
-        ListFooterComponent={() => (
-          // Without this, the content renders under the bottom navigation bar
-          // With this, the scroller on android doesn't reach all the way to the bottom
-          // even though it does show the content correctly
-          // should get fixed at some point soon
-          <View style={{ marginBottom: HEADER_MAX_HEIGHT }} />
-        )}
       />
     </Container>
   );

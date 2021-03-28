@@ -2,9 +2,11 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import pxGenerator from "../helpers/pxGenerator";
 import useTheme from "../hooks/useTheme";
-import CustomTextInput, { DEFAULT_SHADOW_STYLE } from "./CustomTextInput";
+import { DEFAULT_SHADOW_STYLE } from "./CustomTextInput";
 import Icon from "./Icon";
 import PropTypes from "prop-types";
+import DelayedInput from "react-native-debounce-input";
+import { SEMI_BOLD_FF } from "./Typography";
 
 const SearchBar = ({ value, onChange, placeholder }) => {
   const theme = useTheme();
@@ -18,12 +20,13 @@ const SearchBar = ({ value, onChange, placeholder }) => {
         },
       ]}
     >
-      <Icon name="search" size={24} color={theme.accent.secondary} />
-      <CustomTextInput
-        disableShadow
+      <Icon name="search" size={22} color={theme.accent.secondary} />
+      <DelayedInput
         placeholder={placeholder}
         value={value}
         onChangeText={onChange}
+        delayTimeout={600}
+        minLength={0}
         style={[
           styles.textInput,
           { backgroundColor: theme.background.primary[1] },
@@ -51,9 +54,10 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderRadius: 100,
-    borderColor: "transparent",
     flex: 1,
     paddingVertical: pxGenerator(2),
     paddingHorizontal: pxGenerator(3),
+    fontFamily: SEMI_BOLD_FF,
+    fontSize: 16,
   },
 });

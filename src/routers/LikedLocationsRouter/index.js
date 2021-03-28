@@ -24,7 +24,7 @@ function MainLikedLocationsRouter() {
 const LikedLocationsRouter = () => {
   const isLoggedIn = useSelector((state) => state.person.isLoggedIn);
 
-  return !isLoggedIn ? ( //TODO: Change this, its just for testing
+  return isLoggedIn ? (
     <MainLikedLocationsRouter />
   ) : (
     <NoAuthRouter
