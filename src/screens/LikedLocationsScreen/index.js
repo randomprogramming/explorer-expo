@@ -1,67 +1,25 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import {
   View,
   FlatList,
   Animated,
-  Dimensions,
-  StyleSheet,
   RefreshControl,
   Platform,
 } from "react-native";
-// import styles from "./styles";
+import styles from "./styles";
 import Typography from "../../components/Typography";
 import Container from "../../components/Container";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
 import pxGenerator from "../../helpers/pxGenerator";
 import SearchBar from "../../components/SearchBar";
 import { useSelector, useDispatch } from "react-redux";
 import { setSearchValue } from "../../reducers/likedLocationsReducer";
 import { getLikedLocations } from "../../actions/likedLocationsActions";
 import useTheme from "../../hooks/useTheme";
+import Location from "./Location";
 
 const HEADER_MAX_HEIGHT = 140;
 const HEADER_MIN_HEIGHT = 70;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-
-const styles = StyleSheet.create({
-  header: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "#fff",
-    zIndex: 99,
-    paddingHorizontal: pxGenerator(8),
-  },
-  bar: {
-    marginTop: pxGenerator(4),
-    position: "relative",
-  },
-  scrollViewContent: {
-    marginTop: HEADER_MAX_HEIGHT,
-  },
-  row: {
-    marginVertical: 16,
-    height: 300,
-    backgroundColor: "#D3D3D3",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 30,
-    elevation: 5,
-  },
-});
-
-const Item = ({ index, item }) => {
-  const { title, media } = item;
-
-  return (
-    <View>
-      <View style={styles.row}>
-        <Typography>{title}</Typography>
-      </View>
-    </View>
-  );
-};
 
 const LikedLocationsScreen = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -79,13 +37,13 @@ const LikedLocationsScreen = () => {
   const dispatch = useDispatch();
 
   const headerHeightAnim = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE + pxGenerator(10)],
+    inputRange: [0, HEADER_SCROLL_DISTANCE + pxGenerator(5)],
     outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
     extrapolate: "clamp",
   });
 
   const opacityAnim = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    inputRange: [0, HEADER_SCROLL_DISTANCE - 20],
     outputRange: [1, 0],
     extrapolate: "clamp",
   });
@@ -122,30 +80,24 @@ const LikedLocationsScreen = () => {
         style={[
           styles.header,
           {
+            backgroundColor: theme.background.primary[0],
             height: headerHeightAnim,
             elevation: elevationAnim,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
             shadowOpacity: shadowAnim,
-            shadowRadius: 2.62,
           },
         ]}
       >
-        <Animated.View
-          style={[styles.bar, { position: "relative", top: topPositionAnim }]}
-        >
+        <Animated.View style={[styles.bar, { top: topPositionAnim }]}>
           <Animated.View style={{ opacity: opacityAnim }}>
             <Typography variant="h1">Liked Locations</Typography>
           </Animated.View>
           <View
-            style={{
-              height: HEADER_MIN_HEIGHT,
-              position: "relative",
-              marginTop: pxGenerator(1.5),
-            }}
+            style={[
+              styles.searchBarContainer,
+              {
+                height: HEADER_MIN_HEIGHT,
+              },
+            ]}
           >
             <SearchBar
               value={searchValue}
@@ -157,8 +109,8 @@ const LikedLocationsScreen = () => {
 
       <FlatList
         data={filteredLocations}
-        renderItem={(props) => <Item {...props} />}
-        style={{ flex: 1 }}
+        renderItem={(props) => <Location {...props} />}
+        style={styles.flatList}
         scrollEventThrottle={16}
         refreshControl={
           <RefreshControl
@@ -169,14 +121,12 @@ const LikedLocationsScreen = () => {
           />
         }
         contentInset={{ top: Platform.OS === "ios" && HEADER_MAX_HEIGHT - 40 }}
-        // contentOffset={{ x: 0, y: -HEADER_MAX_HEIGHT }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: false }
         )}
         contentContainerStyle={{
           paddingTop: Platform.OS === "android" && HEADER_MAX_HEIGHT,
-          paddingHorizontal: pxGenerator(8),
         }}
       />
     </Container>
