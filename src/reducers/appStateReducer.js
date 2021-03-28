@@ -5,6 +5,7 @@ const initialState = {
   bottomTabBarIconSize: 23,
 
   isCameraActive: false,
+  safeAreaViewEdges: ["all"],
 };
 
 const appStateSlice = createSlice({
@@ -25,12 +26,20 @@ const appStateSlice = createSlice({
         state.isCameraActive = newState;
       }
     },
+    setSafeAreaViewEdges: (state, action) => {
+      state.safeAreaViewEdges = action.payload;
+    },
+    resetSafeAreaViewEdges: (state) => {
+      state.safeAreaViewEdges = ["all"];
+    },
   },
 });
 
 export const {
   setIsBottomTabBarVisible,
   setIsCameraActive,
+  setSafeAreaViewEdges,
+  resetSafeAreaViewEdges,
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

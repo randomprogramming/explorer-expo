@@ -106,7 +106,8 @@ const LikedLocationsScreen = () => {
           </View>
         </Animated.View>
       </Animated.View>
-
+      {/* TODO: Draw some small image when there are no liked locations 
+            and write some text like "There are no locations you've liked yet!" */}
       <FlatList
         data={filteredLocations}
         renderItem={(props) => <Location {...props} />}

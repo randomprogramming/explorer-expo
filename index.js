@@ -1,12 +1,13 @@
 import { registerRootComponent } from "expo";
 import React from "react";
-import { SafeAreaView, StyleSheet, StatusBar } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import { Provider } from "react-redux";
 import App from "./App";
 import useTheme from "./src/hooks/useTheme";
 import store from "./store";
 import { NavigationContainer } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function MainWrapper() {
   // We want to use redux state from some of the other wrappers, so we have to split them up
@@ -21,6 +22,9 @@ function WithWrapper() {
   const theme = useTheme();
 
   const isCameraActive = useSelector((state) => state.appState.isCameraActive);
+  const safeAreaViewEdges = useSelector(
+    (state) => state.appState.safeAreaViewEdges
+  );
 
   return (
     <NavigationContainer>
@@ -31,6 +35,7 @@ function WithWrapper() {
         }
       />
       <SafeAreaView
+        edges={safeAreaViewEdges}
         style={[
           styles.main,
           isCameraActive
