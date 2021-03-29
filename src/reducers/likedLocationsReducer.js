@@ -34,6 +34,7 @@ const likedLocationsSlice = createSlice({
       // when we set all locations, we basically want to reset the entire state
       // also set the filtered locations to be the same as all locations in the beginning
       return {
+        ...state,
         allLocations: action.payload,
         filteredLocations: action.payload,
         searchValue: "",

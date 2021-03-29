@@ -8,7 +8,14 @@ export function getLocationsForRegion(region) {
       const response = await axios({
         method: "POST",
         url: SEARCH_REGION_FOR_LOCATIONS_URL,
-        data: region,
+        data: {
+          // We have to modify the deltas because we otherwise have loads of
+          // off-screen locations
+          latitude: region.latitude,
+          latitudeDelta: region.latitudeDelta * 0.55,
+          longitude: region.longitude,
+          longitudeDelta: region.longitudeDelta * 0.55,
+        },
       });
 
       dispatch(setLocations(response.data.content));
