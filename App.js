@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text } from "react-native";
 import {
   useFonts,
@@ -23,6 +23,8 @@ import {
 } from "@expo-google-fonts/poppins";
 import MainRouter from "./src/routers/MainRouter";
 import Container from "./src/components/Container";
+import { useDispatch } from "react-redux";
+import { checkSecureStorageForToken } from "./src/actions/personActions";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -45,6 +47,12 @@ export default function App() {
     Poppins_900Black,
     Poppins_900Black_Italic,
   });
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkSecureStorageForToken());
+  }, []);
 
   return (
     <Container>

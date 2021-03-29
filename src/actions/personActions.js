@@ -8,6 +8,7 @@ import {
   setUser,
   setLoggedInStatus,
 } from "../reducers/personReducer";
+import * as SecureStore from "expo-secure-store";
 
 export function handleLogin(loginData) {
   return async (dispatch) => {
@@ -26,8 +27,6 @@ export function handleLogin(loginData) {
 
       const { token } = response.data;
       dispatch(fetchUserFromToken(token, true));
-      dispatch(setToken(token));
-      dispatch(setLoggedInStatus(true));
     } catch (err) {
       console.log("Error when fetching token:", err);
     }
@@ -54,6 +53,13 @@ export function fetchUserFromToken(token, useOnLoginSuccessCallback) {
         },
       });
 
+      // if the token is valid, this request will not fail
+      // we want to store the token in SecureStore and the redux store
+      // and we want to set the login status to true
+      SecureStore.setItemAsync("token", token);
+      dispatch(setToken(token));
+      dispatch(setLoggedInStatus(true));
+
       const { onLoginSuccess } = getState().person;
       if (useOnLoginSuccessCallback && onLoginSuccess) {
         onLoginSuccess();
@@ -64,6 +70,24 @@ export function fetchUserFromToken(token, useOnLoginSuccessCallback) {
       // If we get an error here, it means that the token is not valid
       dispatch(setInitialState());
       console.log("Error when fetching username.");
+    }
+  };
+}
+
+export function checkSecureStorageForToken() {
+  return async (dispatch) => {
+    try {
+      const token = await SecureStore.getItemAsync("token");
+
+      if (token && token.length > 0) {
+        // this action will check if the token is valid and set all the necessary data
+        dispatch(fetchUserFromToken(token, false));
+      } else {
+        SecureStore.deleteItemAsync("token");
+      }
+    } catch (err) {
+      SecureStore.deleteItemAsync("token");
+      console.log("Error when checking for the token: ", err);
     }
   };
 }
