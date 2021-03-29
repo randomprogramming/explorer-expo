@@ -3,10 +3,11 @@ import { StyleSheet, View, Image, ActivityIndicator } from "react-native";
 import { Marker } from "react-native-maps";
 import useTheme from "../../hooks/useTheme";
 import Icon from "../../components/Icon";
+import PropTypes from "prop-types";
 
 const IMAGE_SIZE = 50;
 
-const LocationMarker = ({ location }) => {
+const LocationMarker = ({ location, onPress }) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const theme = useTheme();
 
@@ -16,6 +17,7 @@ const LocationMarker = ({ location }) => {
         longitude: location.longitude,
         latitude: location.latitude,
       }}
+      onPress={() => onPress(location.id)}
     >
       <View style={styles.main}>
         <View
@@ -56,6 +58,11 @@ const LocationMarker = ({ location }) => {
 };
 
 export default LocationMarker;
+
+LocationMarker.propTypes = {
+  location: PropTypes.object,
+  onPress: PropTypes.func,
+};
 
 const styles = StyleSheet.create({
   main: {
