@@ -44,6 +44,7 @@ const MapScreen = () => {
   }, [isFocused]);
 
   useEffect(() => {
+    // TODO: If the previous selectedLocation had keys, don't snap to last position, instead use -2 or something
     const selectedLocationHasKeys = Object.keys(selectedLocation).length > 0;
     setIsLocationSelected(selectedLocationHasKeys);
 

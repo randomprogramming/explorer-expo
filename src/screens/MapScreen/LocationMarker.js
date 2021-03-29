@@ -49,7 +49,7 @@ const LocationMarker = ({ location, onPress }) => {
           </View>
         </View>
         <View style={{ marginTop: -1 }}>
-          <Icon name="markerArrow" size={11} color={theme.accent.secondary} />
+          <Icon name="markerArrow" size={9} color={theme.accent.secondary} />
         </View>
         {/* TODO: Add small shadow under the marker */}
       </View>
