@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  ActivityIndicator,
+  Platform,
+} from "react-native";
 import { Marker } from "react-native-maps";
 import useTheme from "../../hooks/useTheme";
 import Icon from "../../components/Icon";
 import PropTypes from "prop-types";
 import getThumbnailFromMedia from "../../helpers/getThumbnailFromMedia";
+import Typography from "../../components/Typography";
+import pxGenerator from "../../helpers/pxGenerator";
 
 const IMAGE_SIZE = 50;
 
@@ -20,6 +28,23 @@ const LocationMarker = ({ location, onPress }) => {
       }}
       onPress={() => onPress(location.id)}
     >
+      <View
+        style={[
+          styles.likeCountContainer,
+          {
+            backgroundColor: theme.accent.primary,
+          },
+        ]}
+      >
+        <Icon name="heart" size={10} color={theme.common.white} />
+        <Typography
+          fontSize={10}
+          color={theme.common.white}
+          style={styles.likeText}
+        >
+          {location.likeCount}
+        </Typography>
+      </View>
       <View style={styles.main}>
         <View
           style={[
@@ -69,6 +94,7 @@ const styles = StyleSheet.create({
   main: {
     flexDirection: "column",
     alignItems: "center",
+    position: "relative",
   },
   outerImageContainer: {
     padding: 2,
@@ -91,5 +117,21 @@ const styles = StyleSheet.create({
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
     justifyContent: "center",
+  },
+  likeCountContainer: {
+    position: "absolute",
+    zIndex: 111,
+    // You cant draw outside the parent view in android from what i understand, while
+    // this works completely fine on ios
+    right: Platform.select({ ios: -pxGenerator(3), android: 0 }),
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: pxGenerator(1),
+    paddingVertical: pxGenerator(0.5),
+    borderRadius: pxGenerator(3),
+  },
+  likeText: {
+    marginLeft: pxGenerator(1),
   },
 });
