@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -18,7 +18,14 @@ const IMAGE_SIZE = 50;
 
 const LocationMarker = ({ location, onPress }) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [shouldTrackViewChanges, setShouldTrackViewChanges] = useState(true);
   const theme = useTheme();
+
+  useEffect(() => {
+    if (!isImageLoading && shouldTrackViewChanges) {
+      setShouldTrackViewChanges(false);
+    }
+  }, [isImageLoading]);
 
   return (
     <Marker
@@ -27,6 +34,11 @@ const LocationMarker = ({ location, onPress }) => {
         latitude: location.latitude,
       }}
       onPress={() => onPress(location.id)}
+      // Since the isImageLoading may or may not change multiple times,
+      // we have to use a new field to track this
+      // This should be true until the image loads, after which it should stay FALSE,
+      // the entire time it is mounted
+      tracksViewChanges={shouldTrackViewChanges}
     >
       <View
         style={[
@@ -123,7 +135,7 @@ const styles = StyleSheet.create({
     zIndex: 111,
     // You cant draw outside the parent view in android from what i understand, while
     // this works completely fine on ios
-    right: Platform.select({ ios: -pxGenerator(3), android: 0 }),
+    right: Platform.select({ ios: -pxGenerator(2), android: 0 }),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
