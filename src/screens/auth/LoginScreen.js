@@ -71,7 +71,7 @@ const LoginScreen = ({ navigation }) => {
           onChange={(newValue) => handleDataChange(newValue, password)}
           marginTop={FIELD_MARGIN}
         />
-
+        {/* TODO: Add a message when credentials are wrong */}
         {/* TODO: Style this according to the status code, make it green for 200 and red for 400 */}
         <Typography>{serverResponse.message}</Typography>
       </View>

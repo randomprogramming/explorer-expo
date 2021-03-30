@@ -1,4 +1,4 @@
-export function getFileNameFromPath(path) {
+export default function getFileNameFromPath(path) {
   if (typeof path !== "string") {
     return "";
   }

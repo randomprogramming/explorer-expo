@@ -4,6 +4,7 @@ import { Marker } from "react-native-maps";
 import useTheme from "../../hooks/useTheme";
 import Icon from "../../components/Icon";
 import PropTypes from "prop-types";
+import getThumbnailFromMedia from "../../helpers/getThumbnailFromMedia";
 
 const IMAGE_SIZE = 50;
 
@@ -31,7 +32,7 @@ const LocationMarker = ({ location, onPress }) => {
         >
           <View style={styles.innerImageContainer}>
             <Image
-              source={{ uri: location.media[0].url }}
+              source={{ uri: getThumbnailFromMedia(location.media).url }}
               style={styles.image}
               onLoadStart={() => setIsImageLoading(true)}
               onLoadEnd={() => setIsImageLoading(false)}

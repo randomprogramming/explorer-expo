@@ -45,7 +45,7 @@ export function handleAddLocation(coordinates) {
 
     for (let i = 0; i < media.length; i++) {
       data.append("media", {
-        name: getFileNameFromPath(media[i].uri),
+        name: i.toString(),
         type: "image/jpeg",
         uri:
           Platform.OS === "android"

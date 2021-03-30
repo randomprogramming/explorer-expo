@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Typography from "../../components/Typography";
+import getThumbnailFromMedia from "../../helpers/getThumbnailFromMedia";
 import pxGenerator from "../../helpers/pxGenerator";
 
 const Location = ({ index, item }) => {
@@ -18,7 +19,7 @@ const Location = ({ index, item }) => {
       <View>
         <Image
           source={{
-            uri: media[0].url,
+            uri: getThumbnailFromMedia(media).url,
           }}
           style={{
             width: Dimensions.get("screen").width,

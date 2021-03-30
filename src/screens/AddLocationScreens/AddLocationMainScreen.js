@@ -154,9 +154,9 @@ const AddLocationMainScreen = ({ navigation }) => {
 
   // Take the height and width of the first image and use it as reference aspect ratio for the rest of the images
   const aspectRatio = media[0].height / media[0].width;
-  // const aspectRatio = 1.5; // TODO: Remove this, its only for testing purposes
   const imageRatio = 2.6;
 
+  // TODO: add a loading icon and maybe clean the state after successful upload
   return (
     <ScrollViewContainer
       defaultPadding
