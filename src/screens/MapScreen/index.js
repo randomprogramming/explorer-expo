@@ -59,7 +59,11 @@ const MapScreen = () => {
 
   return (
     <>
-      <MapView style={styles.map} onRegionChangeComplete={handleRegionChange}>
+      <MapView
+        style={styles.map}
+        onRegionChangeComplete={handleRegionChange}
+        showsUserLocation
+      >
         {locations &&
           locations.map((location) => (
             <LocationMarker

@@ -222,6 +222,7 @@ const AddLocationMainScreen = ({ navigation }) => {
           style={{ marginVertical: pxGenerator(3) }}
           components={SWITCH_COMPONENTS}
           onChange={setActiveSwitchComponent}
+          rightButtonIsDisabled={!hasLocationPermission}
         />
         {/* TODO: read the docs for mapview, NSLocationWhenInUseUsageDescription has to be added and some api keys or smthing */}
         {/* Excuse the mess here, we have to use overflow: hidden, but iOS doesn't like when you use overflow with shadows */}

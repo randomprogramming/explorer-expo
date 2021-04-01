@@ -29,7 +29,8 @@ const LikedLocationsRouter = () => {
   ) : (
     <NoAuthRouter
       noAuthScreenTitle="Liked Locations"
-      noAuthScreenText="dsasadss"
+      noAuthScreenText="Once you sign in you will be able to start liking
+      locations and collect them here so that you can visit them any time!"
     />
   );
 };
