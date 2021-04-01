@@ -12,6 +12,13 @@ export const MARK_LOCATION_AS_LIKED = (locationId) => {
     return "Error.";
   }
 };
+export const DISLIKE_LOCATION = (locationId) => {
+  if (typeof locationId === "string" && locationId.length > 0) {
+    return LOCATION_URL + `/dislike/${locationId}`;
+  } else {
+    return "Error.";
+  }
+};
 export const LIKED_LOCATIONS_URL = LOCATION_URL + "/liked";
 export const SEARCH_REGION_FOR_LOCATIONS_URL = LOCATION_URL + "/region";
 

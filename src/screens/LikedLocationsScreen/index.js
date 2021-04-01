@@ -102,6 +102,7 @@ const LikedLocationsScreen = () => {
             <SearchBar
               value={searchValue}
               onChange={(newVal) => dispatch(setSearchValue(newVal))}
+              placeholder="Search locations"
             />
           </View>
         </Animated.View>
@@ -121,7 +122,7 @@ const LikedLocationsScreen = () => {
             progressBackgroundColor={theme.accent.primary}
           />
         }
-        contentInset={{ top: Platform.OS === "ios" && HEADER_MAX_HEIGHT - 40 }}
+        contentInset={{ top: Platform.OS === "ios" && HEADER_MAX_HEIGHT - 35 }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: false }

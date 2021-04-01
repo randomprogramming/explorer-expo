@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import Typography from "../../components/Typography";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -8,7 +8,12 @@ import PropTypes from "prop-types";
 import pxGenerator from "../../helpers/pxGenerator";
 import Carousel, { ParallaxImage } from "react-native-snap-carousel";
 import { ScrollView } from "react-native-gesture-handler";
-import Icon from "../../components/Icon";
+import AnimatedLikeIcon from "../../components/AnimatedLikeIcon";
+import {
+  checkIfLocationIsLiked,
+  dislikeLocation,
+  markLocationAsLiked,
+} from "../../actions/basicLikeActions";
 
 const { width: screenWidth } = Dimensions.get("window");
 const contentPadding = 60;
@@ -49,8 +54,25 @@ const CustomHandle = ({ isLocationSelected }) => {
 };
 
 const BottomSheetLocation = ({ sheetRef, snapPoints, isLocationSelected }) => {
+  const [isSelectedLocationLiked, setIsSelectedLocationLiked] = useState(false);
+
   const selectedLocation = useSelector((state) => state.map.selectedLocation);
   const locations = useSelector((state) => state.map.locations);
+  const isLoggedIn = useSelector((state) => state.person.isLoggedIn);
+
+  async function handleLikeButtonPress() {
+    if (isSelectedLocationLiked) {
+      const response = await dislikeLocation(selectedLocation.id);
+      if (response) {
+        setIsSelectedLocationLiked(false);
+      }
+    } else {
+      const response = await markLocationAsLiked(selectedLocation.id);
+      if (response) {
+        setIsSelectedLocationLiked(true);
+      }
+    }
+  }
 
   const renderWhenLocationNotSelected = () => (
     <View
@@ -59,8 +81,43 @@ const BottomSheetLocation = ({ sheetRef, snapPoints, isLocationSelected }) => {
         alignItems: "center",
       }}
     >
-      <Typography>{locations.length} available locations</Typography>
+      <Typography>{locations.length} locations in the region</Typography>
     </View>
+  );
+
+  const renderWhenLocationSelected = () => (
+    <ScrollView style={styles.scrollViewContainer}>
+      <Carousel
+        layout="stack"
+        sliderWidth={screenWidth}
+        sliderHeight={screenWidth}
+        itemWidth={screenWidth - contentPadding}
+        data={selectedLocation.media}
+        renderItem={renderCarouselItem}
+        hasParallaxImages
+        loop
+      />
+
+      <View style={styles.infoContainer}>
+        <View style={styles.primaryInfoContainer}>
+          <Typography variant="h2">{selectedLocation.title}</Typography>
+          <Typography color="accentSecondary">
+            {/* TODO: Maybe add a image of the user here */}
+            Added by: {selectedLocation.createdBy.username}
+          </Typography>
+        </View>
+
+        {isLoggedIn && (
+          <View style={styles.likeButtonContainer}>
+            <AnimatedLikeIcon
+              onPress={handleLikeButtonPress}
+              isLocationLiked={isSelectedLocationLiked}
+              size={34}
+            />
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 
   const renderCarouselItem = ({ item }, parallaxProps) => {
@@ -79,35 +136,14 @@ const BottomSheetLocation = ({ sheetRef, snapPoints, isLocationSelected }) => {
     );
   };
 
-  const renderWhenLocationSelected = () => (
-    <ScrollView style={styles.scrollViewContainer}>
-      <Carousel
-        layout="stack"
-        sliderWidth={screenWidth}
-        sliderHeight={screenWidth}
-        itemWidth={screenWidth - contentPadding}
-        data={selectedLocation.media}
-        renderItem={renderCarouselItem}
-        hasParallaxImages
-        loop
-      />
-
-      {/* TOOD: Finish this */}
-      <View
-        style={{ flexDirection: "row", paddingHorizontal: contentPadding / 2 }}
-      >
-        <View style={{ flex: 1 }}>
-          <Typography variant="h2">{selectedLocation.title}</Typography>
-          <Typography color="accentSecondary">
-            Added by: {selectedLocation.createdBy.username}
-          </Typography>
-        </View>
-        <View style={{ alignSelf: "center" }}>
-          <Icon name="heart" size={34} color="black" />
-        </View>
-      </View>
-    </ScrollView>
-  );
+  useEffect(() => {
+    // Whenever the selected location changes, we check if it's an already liked location
+    if (isLoggedIn) {
+      checkIfLocationIsLiked(selectedLocation.id).then((response) =>
+        setIsSelectedLocationLiked(response)
+      );
+    }
+  }, [selectedLocation, isLoggedIn]);
 
   return (
     <BottomSheet
@@ -187,4 +223,13 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     resizeMode: "cover",
   },
+  likeButtonContainer: {
+    paddingBottom: pxGenerator(8),
+  },
+  infoContainer: {
+    flexDirection: "row",
+    paddingHorizontal: contentPadding / 2,
+    marginTop: 12,
+  },
+  primaryInfoContainer: { flex: 1 },
 });

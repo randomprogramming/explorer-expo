@@ -23,6 +23,7 @@ const SearchBar = ({ value, onChange, placeholder }) => {
       <Icon name="search" size={22} color={theme.accent.secondary} />
       <DelayedInput
         placeholder={placeholder}
+        placeholderTextColor={theme.accent.secondary}
         value={value}
         onChangeText={onChange}
         delayTimeout={600}
