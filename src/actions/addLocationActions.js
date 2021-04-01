@@ -1,6 +1,5 @@
 import axios from "axios";
 import { LOCATION_URL } from "../../apiLinks";
-import { getFileNameFromPath } from "../helpers/getFileNameFromPath";
 import {
   setIsUploadingLocation,
   wipeState,
@@ -15,8 +14,6 @@ export function handleAddLocation(coordinates) {
       media,
     } = getState().addLocation;
     dispatch(setIsUploadingLocation(true));
-
-    const token = getState().person.token;
 
     const data = new FormData();
     data.append("title", title);
@@ -43,6 +40,9 @@ export function handleAddLocation(coordinates) {
       }
     }
 
+    // picture upload
+    // The name of the picture must be equals to "0", "1" and etc.
+    // The server picks the thumbnail image based from the names
     for (let i = 0; i < media.length; i++) {
       data.append("media", {
         name: i.toString(),
@@ -59,12 +59,9 @@ export function handleAddLocation(coordinates) {
         url: LOCATION_URL,
         method: "POST",
         data,
-        headers: {
-          Authorization: "Bearer " + token,
-        },
       });
 
-      if (response.status === "200") {
+      if (response.status === 200) {
         alert("Location successfully added.");
         dispatch(wipeState());
       }

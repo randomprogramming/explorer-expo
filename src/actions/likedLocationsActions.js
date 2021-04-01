@@ -6,17 +6,13 @@ import {
 } from "../reducers/likedLocationsReducer";
 
 export function getLikedLocations() {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(setIsFetchingData(true));
-    const token = getState().person.token;
 
     try {
       const response = await axios({
         method: "GET",
         url: LIKED_LOCATIONS_URL,
-        headers: {
-          Authorization: "Bearer " + token,
-        },
       });
 
       dispatch(setAllLocations(response.data));

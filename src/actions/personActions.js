@@ -60,6 +60,9 @@ export function fetchUserFromToken(token, useOnLoginSuccessCallback) {
       dispatch(setToken(token));
       dispatch(setLoggedInStatus(true));
 
+      // set the default auth token so that we don't have to do it manually on every request
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
       const { onLoginSuccess } = getState().person;
       if (useOnLoginSuccessCallback && onLoginSuccess) {
         onLoginSuccess();
