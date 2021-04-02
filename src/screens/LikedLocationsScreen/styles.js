@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import pxGenerator from "../../helpers/pxGenerator";
 
 export default StyleSheet.create({
   header: {
@@ -23,4 +24,14 @@ export default StyleSheet.create({
     marginTop: pxGenerator(1.5),
   },
   flatList: { flex: 1 },
+  centeredText: { textAlignVertical: "center", textAlign: "center" },
+  listEmptyComponentMain: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    opacity: 0.6,
+    alignContent: "center",
+    paddingHorizontal: pxGenerator(8),
+    paddingVertical: pxGenerator(8),
+  },
 });

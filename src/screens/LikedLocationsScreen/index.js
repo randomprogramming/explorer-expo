@@ -5,6 +5,7 @@ import {
   Animated,
   RefreshControl,
   Platform,
+  Dimensions,
 } from "react-native";
 import styles from "./styles";
 import Typography from "../../components/Typography";
@@ -16,6 +17,7 @@ import { setSearchValue } from "../../reducers/likedLocationsReducer";
 import { getLikedLocations } from "../../actions/likedLocationsActions";
 import useTheme from "../../hooks/useTheme";
 import Location from "./Location";
+import Icon from "../../components/Icon";
 
 const HEADER_MAX_HEIGHT = 140;
 const HEADER_MIN_HEIGHT = 70;
@@ -70,6 +72,22 @@ const LikedLocationsScreen = () => {
     dispatch(getLikedLocations());
   }
 
+  const ListEmptyComponent = () => {
+    return (
+      <View style={styles.listEmptyComponentMain}>
+        <Icon
+          name="locations-empty"
+          size={Dimensions.get("window").width / 1.7}
+          color={theme.background.secondary[1]}
+        />
+        <Typography color="accentSecondary" style={styles.centeredText}>
+          Seems like you haven't liked any locations yet. Find locations using
+          the map and like them, they will show up here.
+        </Typography>
+      </View>
+    );
+  };
+
   useEffect(() => {
     fetchLikedLocations();
   }, []);
@@ -107,8 +125,6 @@ const LikedLocationsScreen = () => {
           </View>
         </Animated.View>
       </Animated.View>
-      {/* TODO: Draw some small image when there are no liked locations 
-            and write some text like "There are no locations you've liked yet!" */}
       <FlatList
         data={filteredLocations}
         renderItem={(props) => <Location {...props} />}
@@ -122,6 +138,7 @@ const LikedLocationsScreen = () => {
             progressBackgroundColor={theme.accent.primary}
           />
         }
+        ListEmptyComponent={ListEmptyComponent}
         contentInset={{ top: Platform.OS === "ios" && HEADER_MAX_HEIGHT - 35 }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],

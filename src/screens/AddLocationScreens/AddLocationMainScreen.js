@@ -73,6 +73,10 @@ const AddLocationMainScreen = ({ navigation }) => {
   }
 
   function handleAddLocationPress() {
+    console.log(
+      "mapref addressForCoordinate",
+      mapRef.current.addressForCoordinate
+    );
     if (activeSwitchComponent === ENTER_MANUALLY) {
       dispatch(handleAddLocation());
     } else {
