@@ -4,13 +4,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as names from "./names";
 import useTheme from "../../hooks/useTheme";
 import MapScreen from "../../screens/MapScreen";
-import SettingsScreen from "../../screens/SettingsScreen";
 import AddLocationRouter from "../AddLocationRouter";
 import { useSelector } from "react-redux";
 import CustomBottomTabBar from "../../components/CustomBottomTabBar";
 import Icon from "../../components/Icon";
 import LikedLocationsRouter from "../LikedLocationsRouter";
 import DiscoverRouter from "../DiscoverRouter";
+import ProfileRouter from "../ProfileRouter";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +27,7 @@ const MainRouter = () => {
     <Tab.Navigator
       tabBar={(props) => <CustomBottomTabBar {...props} />}
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused }) => {
           const clr = focused ? theme.accent.primary : theme.accent.secondary;
 
           switch (route.name) {
@@ -39,7 +39,7 @@ const MainRouter = () => {
               return <Icon name="plus" size={iconSize} color={clr} />;
             case names.LIKED_LOCATIONS_SCREEN:
               return <Icon name="heart" size={iconSize} color={clr} />;
-            case names.SETTINGS_SCREEN:
+            case names.PROFILE_SCREEN:
               return isLoggedIn && profilePictureUrl ? (
                 <Image
                   source={{
@@ -74,8 +74,7 @@ const MainRouter = () => {
         name={names.LIKED_LOCATIONS_SCREEN}
         component={LikedLocationsRouter}
       />
-      {/* TODO: Replace settings screen with account screen */}
-      <Tab.Screen name={names.SETTINGS_SCREEN} component={SettingsScreen} />
+      <Tab.Screen name={names.PROFILE_SCREEN} component={ProfileRouter} />
     </Tab.Navigator>
   );
 };
