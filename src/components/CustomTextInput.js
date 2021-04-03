@@ -29,6 +29,9 @@ const CustomTextInput = ({
   marginTop,
   style,
   disableShadow,
+  multiline,
+  numberOfLines,
+  maxLength,
 }) => {
   let ref = useRef();
 
@@ -41,7 +44,6 @@ const CustomTextInput = ({
         style: { fontFamily: FONT_FAMILY },
       });
     }
-    //eslint-disable-next-line
   }, [ref]);
 
   return (
@@ -68,6 +70,10 @@ const CustomTextInput = ({
       keyboardType={keyboardType}
       autoCapitalize={autoCapitalize}
       autoCorrect={autoCorrect}
+      multiline={multiline}
+      numberOfLines={numberOfLines}
+      textAlignVertical="top"
+      maxLength={maxLength}
     />
   );
 };
@@ -85,6 +91,9 @@ CustomTextInput.propTypes = {
   marginTop: PropTypes.number,
   style: ViewPropTypes.style,
   disableShadow: PropTypes.bool,
+  multiline: PropTypes.bool,
+  numberOfLines: PropTypes.number,
+  maxLength: PropTypes.number,
 };
 
 const styles = StyleSheet.create({

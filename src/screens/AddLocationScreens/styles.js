@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     borderRadius: pxGenerator(4),
   },
   openCameraContainer: {
-    borderWidth: 4,
+    borderWidth: pxGenerator(1),
     borderStyle: "dotted",
     alignItems: "center",
     justifyContent: "center",
@@ -35,6 +35,10 @@ const styles = StyleSheet.create({
   },
   borderRadius: {
     borderRadius: pxGenerator(4),
+  },
+  descriptionInput: {
+    height: 120,
+    paddingVertical: pxGenerator(1),
   },
 });
 

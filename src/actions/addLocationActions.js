@@ -9,6 +9,7 @@ export function handleAddLocation(coordinates) {
   return async (dispatch, getState) => {
     const {
       title,
+      description,
       selectedLatitude,
       selectedLongitude,
       media,
@@ -17,6 +18,7 @@ export function handleAddLocation(coordinates) {
 
     const data = new FormData();
     data.append("title", title);
+    data.append("description", description);
 
     // If we got some coordinated provided, use them instead of the selected ones
     if (

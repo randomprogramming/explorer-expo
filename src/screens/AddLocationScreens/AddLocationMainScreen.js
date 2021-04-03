@@ -12,6 +12,7 @@ import Camera from "../../components/Camera";
 import {
   appendMediaToState,
   setCoordinates,
+  setDescription,
   setTitle,
 } from "../../reducers/addLocationReducer";
 import styles from "./styles";
@@ -37,6 +38,7 @@ const SWITCH_COMPONENTS = [
 const AddLocationMainScreen = ({ navigation }) => {
   const media = useSelector((state) => state.addLocation.media);
   const title = useSelector((state) => state.addLocation.title);
+  const description = useSelector((state) => state.addLocation.description);
   const selectedLatitude = useSelector(
     (state) => state.addLocation.selectedLatitude
   );
@@ -162,6 +164,7 @@ const AddLocationMainScreen = ({ navigation }) => {
 
   // Take the height and width of the first image and use it as reference aspect ratio for the rest of the images
   const aspectRatio = media[0].height / media[0].width;
+  // const aspectRatio = 1.5; // TODO: Remove this, it's only for testing purposes
   const imageRatio = 2.6;
 
   // TODO: add a loading icon and maybe clean the state after successful upload
@@ -220,6 +223,20 @@ const AddLocationMainScreen = ({ navigation }) => {
           placeholder="Riverside spot for relaxing"
           value={title}
           onChange={(newValue) => dispatch(setTitle(newValue))}
+        />
+      </View>
+      <View style={styles.containerSpacer}>
+        <Typography fontWeight="semi-bold" fontSize={20}>
+          Description
+        </Typography>
+        <CustomTextInput
+          value={description}
+          onChange={(newValue) => dispatch(setDescription(newValue))}
+          multiline
+          numberOfLines={4}
+          autoCorrect
+          style={styles.descriptionInput}
+          maxLength={400} // TODO: make this higher/lower idk
         />
       </View>
       <View style={styles.containerSpacer}>

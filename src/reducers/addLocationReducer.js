@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   media: [],
   title: "",
+  description: "",
   // These are the selected coordinates, if user is using 'Use current location' option, we ignore these
   selectedLatitude: undefined,
   selectedLongitude: undefined,
@@ -20,6 +21,9 @@ const addLocationSlice = createSlice({
     },
     setTitle: (state, action) => {
       state.title = action.payload;
+    },
+    setDescription: (state, action) => {
+      state.description = action.payload;
     },
     setCoordinates: (state, action) => {
       const { latitude, longitude } = action.payload;
@@ -45,6 +49,7 @@ const addLocationSlice = createSlice({
 export const {
   appendMediaToState,
   setTitle,
+  setDescription,
   setCoordinates,
   wipeState,
   setIsUploadingLocation,
