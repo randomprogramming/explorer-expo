@@ -6,19 +6,29 @@ import PropTypes from "prop-types";
 import pxGenerator from "../helpers/pxGenerator";
 import Typography from "./Typography";
 
-const Header = ({ title }) => {
+const Header = ({ title, headerDefaultPadding }) => {
   const theme = useTheme();
 
   return (
     <View
-      style={[styles.header, { backgroundColor: theme.background.primary[0] }]}
+      style={[
+        styles.header,
+        { backgroundColor: theme.background.primary[0] },
+        headerDefaultPadding && styles.defaultHeaderPadding,
+      ]}
     >
       <Typography variant="h1">{title}</Typography>
     </View>
   );
 };
 
-const Container = ({ children, style, defaultPadding, headerTitle }) => {
+const Container = ({
+  children,
+  style,
+  defaultPadding,
+  headerTitle,
+  headerDefaultPadding,
+}) => {
   const theme = useTheme();
 
   // If there was a header title provided, render the container with the header
@@ -32,7 +42,10 @@ const Container = ({ children, style, defaultPadding, headerTitle }) => {
           defaultPadding && styles.defaultPaddingWithHeader,
         ]}
       >
-        <Header title={headerTitle} />
+        <Header
+          title={headerTitle}
+          headerDefaultPadding={headerDefaultPadding}
+        />
         {children}
       </View>
     );
@@ -58,6 +71,7 @@ Container.propTypes = {
   style: ViewPropTypes.style,
   defaultPadding: PropTypes.bool,
   headerTitle: PropTypes.string,
+  headerDefaultPadding: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
@@ -66,6 +80,9 @@ const styles = StyleSheet.create({
   },
   defaultPadding: {
     padding: pxGenerator(8),
+  },
+  defaultHeaderPadding: {
+    paddingHorizontal: pxGenerator(8),
   },
   defaultPaddingWithHeader: {
     paddingHorizontal: pxGenerator(8),

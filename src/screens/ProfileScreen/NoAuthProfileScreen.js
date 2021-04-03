@@ -8,15 +8,17 @@ import useTheme from "../../hooks/useTheme";
 import {
   PROFILE_SCREEN_LOGIN_SCREEN,
   PROFILE_SCREEN_REGISTER_SCREEN,
+  PROFILE_SCREEN_SETTINGS_SCREEN,
 } from "../../routers/ProfileRouter/names";
 import styles from "./styles";
 import { Ionicons } from "@expo/vector-icons";
 
-const MenuItem = ({ name, icon: Icon, isFirst }) => {
+const MenuItem = ({ name, icon: Icon, isFirst, onPress }) => {
   const theme = useTheme();
 
   return (
     <TouchableOpacity
+      onPress={onPress}
       style={[
         styles.menuItem,
         { borderBottomColor: theme.accent.secondary },
@@ -62,6 +64,7 @@ const NoAuthProfileScreen = ({ navigation }) => {
       </View>
       <View style={styles.menu}>
         <MenuItem
+          onPress={() => navigation.navigate(PROFILE_SCREEN_SETTINGS_SCREEN)}
           isFirst
           name="Settings"
           icon={
