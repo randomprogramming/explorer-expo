@@ -23,7 +23,7 @@ const repeatedPasswordField = "repeatedPassword";
 
 const FIELD_MARGIN = 5;
 
-const RegisterScreen = ({ navigation }) => {
+const RegisterScreen = ({ navigation, route }) => {
   const username = useSelector((state) => state.registrationData.username);
   const email = useSelector((state) => state.registrationData.email);
   const password = useSelector((state) => state.registrationData.password);
@@ -66,6 +66,12 @@ const RegisterScreen = ({ navigation }) => {
       password.length === 0 ||
       repeatedPassword.length === 0
     );
+  }
+
+  function getLoginScreenName() {
+    if (route && route.params && route.params.loginScreenName)
+      return route.params.loginScreenName;
+    else return LOGIN_SCREEN;
   }
 
   return (
@@ -120,7 +126,7 @@ const RegisterScreen = ({ navigation }) => {
 
         <View style={styles.linkContainer}>
           <Typography>Already have an account? </Typography>
-          <Link onPress={() => navigation.navigate(LOGIN_SCREEN)}>
+          <Link onPress={() => navigation.navigate(getLoginScreenName())}>
             Log in here
           </Link>
         </View>

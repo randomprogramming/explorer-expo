@@ -15,7 +15,7 @@ const password = "password";
 
 const FIELD_MARGIN = 6;
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, route }) => {
   // TODO: Put this in redux state
   const [loginData, setLoginData] = useState({
     [username]: "",
@@ -44,6 +44,12 @@ const LoginScreen = ({ navigation }) => {
 
   function shouldDisableLoginButton() {
     return loginData.username.length === 0 || loginData.password.length === 0;
+  }
+
+  function getRegisterScreenName() {
+    if (route && route.params && route.params.registerScreenName)
+      return route.params.registerScreenName;
+    else return REGISTER_SCREEN;
   }
 
   return (
@@ -78,7 +84,7 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={styles.linkContainer}>
         <Typography>Don't have an account yet? </Typography>
-        <Link onPress={() => navigation.navigate(REGISTER_SCREEN)}>
+        <Link onPress={() => navigation.navigate(getRegisterScreenName())}>
           Sign up here
         </Link>
       </View>

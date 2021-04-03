@@ -1,10 +1,40 @@
+import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { useSelector } from "react-redux";
-import Typography from "../../components/Typography";
+import LoginScreen from "../../screens/auth/LoginScreen";
+import RegisterScreen from "../../screens/auth/RegisterScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
+import NoAuthProfileScreen from "../../screens/ProfileScreen/NoAuthProfileScreen";
+import * as names from "./names";
+
+const Stack = createStackNavigator();
 
 const ProfileScreenNoAuthRouter = () => {
-  return <Typography>Profile screen no auth</Typography>;
+  return (
+    <Stack.Navigator
+      headerMode="none"
+      initialRouteName={names.PROFILE_SCREEN_NO_AUTH_MAIN_SCREEN}
+    >
+      <Stack.Screen
+        name={names.PROFILE_SCREEN_NO_AUTH_MAIN_SCREEN}
+        component={NoAuthProfileScreen}
+      />
+      <Stack.Screen
+        name={names.PROFILE_SCREEN_LOGIN_SCREEN}
+        component={LoginScreen}
+        initialParams={{
+          registerScreenName: names.PROFILE_SCREEN_REGISTER_SCREEN,
+        }}
+      />
+      <Stack.Screen
+        name={names.PROFILE_SCREEN_REGISTER_SCREEN}
+        component={RegisterScreen}
+        initialParams={{
+          loginScreenName: names.PROFILE_SCREEN_LOGIN_SCREEN,
+        }}
+      />
+    </Stack.Navigator>
+  );
 };
 
 const ProfileRouter = () => {
