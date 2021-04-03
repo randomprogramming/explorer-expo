@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions, Image } from "react-native";
 import Typography from "../../components/Typography";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useSelector } from "react-redux";
@@ -61,6 +61,8 @@ const BottomSheetLocation = ({ sheetRef, snapPoints, isLocationSelected }) => {
   const locations = useSelector((state) => state.map.locations);
   const isLoggedIn = useSelector((state) => state.person.isLoggedIn);
 
+  const theme = useTheme();
+
   async function handleLikeButtonPress() {
     if (isSelectedLocationLiked) {
       const response = await dislikeLocation(selectedLocation.id);
@@ -99,24 +101,39 @@ const BottomSheetLocation = ({ sheetRef, snapPoints, isLocationSelected }) => {
         loop
       />
 
-      <View style={styles.infoContainer}>
-        <View style={styles.primaryInfoContainer}>
-          <Typography variant="h2">{selectedLocation.title}</Typography>
-          <Typography color="accentSecondary">
-            {/* TODO: Maybe add a image of the user here */}
-            Added by: {selectedLocation.createdBy.username}
-          </Typography>
+      <View style={styles.content}>
+        <View style={styles.infoContainer}>
+          <View style={styles.primaryInfoContainer}>
+            <Typography variant="h2">{selectedLocation.title}</Typography>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Typography color="accentSecondary">Added by: </Typography>
+              <Image
+                source={{ uri: selectedLocation.createdBy.profilePictureUrl }}
+                style={[
+                  styles.smallProfilePicture,
+                  { borderColor: theme.accent.secondary },
+                ]}
+              />
+              <Typography color="accentSecondary">
+                {selectedLocation.createdBy.username}
+              </Typography>
+            </View>
+          </View>
+
+          {isLoggedIn && (
+            <View style={styles.likeButtonContainer}>
+              <AnimatedLikeIcon
+                onPress={handleLikeButtonPress}
+                isLocationLiked={isSelectedLocationLiked}
+                size={34}
+              />
+            </View>
+          )}
         </View>
 
-        {isLoggedIn && (
-          <View style={styles.likeButtonContainer}>
-            <AnimatedLikeIcon
-              onPress={handleLikeButtonPress}
-              isLocationLiked={isSelectedLocationLiked}
-              size={34}
-            />
-          </View>
-        )}
+        <View>
+          <Typography>{selectedLocation.description}</Typography>
+        </View>
       </View>
     </ScrollView>
   );
@@ -129,7 +146,7 @@ const BottomSheetLocation = ({ sheetRef, snapPoints, isLocationSelected }) => {
             source={{ uri: item.url }}
             containerStyle={styles.imageContainer}
             style={styles.image}
-            parallaxFactor={0.1}
+            parallaxFactor={0}
             {...parallaxProps}
           />
         </View>
@@ -227,10 +244,20 @@ const styles = StyleSheet.create({
   likeButtonContainer: {
     paddingBottom: pxGenerator(8),
   },
+  content: {
+    paddingHorizontal: contentPadding / 2,
+    marginTop: pxGenerator(3),
+  },
   infoContainer: {
     flexDirection: "row",
-    paddingHorizontal: contentPadding / 2,
-    marginTop: 12,
   },
   primaryInfoContainer: { flex: 1 },
+  smallProfilePicture: {
+    height: 17,
+    width: 17,
+    borderRadius: 30,
+    borderWidth: 1,
+    marginLeft: 2,
+    marginRight: 1,
+  },
 });
