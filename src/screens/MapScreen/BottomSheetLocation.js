@@ -53,6 +53,7 @@ const CustomHandle = ({ isLocationSelected }) => {
   );
 };
 
+// TODO: Change the background color to white even in dark mode
 const BottomSheetLocation = ({ sheetRef, snapPoints, isLocationSelected }) => {
   const [isSelectedLocationLiked, setIsSelectedLocationLiked] = useState(false);
 

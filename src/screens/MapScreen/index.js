@@ -62,7 +62,7 @@ const MapScreen = () => {
       <MapView
         style={styles.map}
         onRegionChangeComplete={handleRegionChange}
-        showsUserLocation
+        showsUserLocation={isFocused}
       >
         {locations &&
           locations.map((location) => (
