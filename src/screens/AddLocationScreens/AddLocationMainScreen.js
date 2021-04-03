@@ -25,6 +25,7 @@ import Switch from "../../components/Switch";
 import BigButton from "../../components/BigButton";
 import { handleAddLocation } from "../../actions/addLocationActions";
 import * as Permissions from "expo-permissions";
+import { useIsFocused } from "@react-navigation/core";
 
 const ENTER_MANUALLY = "ENTER_MANUALLY_KEY";
 const CURRENT_LOCATION = "USE_CURRENT_LOCATION_KEY";
@@ -50,6 +51,9 @@ const AddLocationMainScreen = ({ navigation }) => {
   const [shouldShowCamera, setShouldShowCamera] = useState(true);
   const [currentUserLocation, setCurrentUserLocation] = useState(null);
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
+  const [canAskForLocationPerm, setCanAskForLocationPerm] = useState(false);
+
+  let isFocused = useIsFocused();
 
   const dispatch = useDispatch();
 
@@ -99,10 +103,10 @@ const AddLocationMainScreen = ({ navigation }) => {
   async function getLocationPermissionStatus() {
     const locationPerm = await Permissions.getAsync(Permissions.LOCATION);
     setHasLocationPermission(locationPerm.granted);
+    setCanAskForLocationPerm(locationPerm.canAskAgain);
   }
 
   async function askForLocationPermission() {
-    // TODO: Disable the 'use current location' button if the location isn't granted
     await Permissions.askAsync(Permissions.LOCATION);
     await getLocationPermissionStatus();
   }
@@ -226,7 +230,9 @@ const AddLocationMainScreen = ({ navigation }) => {
           style={{ marginVertical: pxGenerator(3) }}
           components={SWITCH_COMPONENTS}
           onChange={setActiveSwitchComponent}
-          rightButtonIsDisabled={!hasLocationPermission}
+          rightButtonIsDisabled={
+            !hasLocationPermission && !canAskForLocationPerm
+          }
         />
         {/* TODO: read the docs for mapview, NSLocationWhenInUseUsageDescription has to be added and some api keys or smthing */}
         {/* Excuse the mess here, we have to use overflow: hidden, but iOS doesn't like when you use overflow with shadows */}
@@ -242,10 +248,13 @@ const AddLocationMainScreen = ({ navigation }) => {
               }}
               onPress={(event) => handleMapPress(event.nativeEvent.coordinate)}
               onUserLocationChange={(event) =>
+                isFocused &&
                 setCurrentUserLocation(event.nativeEvent.coordinate)
               }
-              showsUserLocation={hasLocationPermission}
-              followsUserLocation={activeSwitchComponent === CURRENT_LOCATION}
+              showsUserLocation={isFocused && hasLocationPermission}
+              followsUserLocation={
+                isFocused && activeSwitchComponent === CURRENT_LOCATION
+              }
             >
               {/* Only show the marker when the user is on manual mode */}
               {selectedLongitude &&
