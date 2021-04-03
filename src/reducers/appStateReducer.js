@@ -6,6 +6,8 @@ const initialState = {
 
   isCameraActive: false,
   safeAreaViewEdges: ["all"],
+
+  isDarkModeActive: false,
 };
 
 const appStateSlice = createSlice({
@@ -32,6 +34,11 @@ const appStateSlice = createSlice({
     resetSafeAreaViewEdges: (state) => {
       state.safeAreaViewEdges = ["all"];
     },
+    setIsDarkModeActive: (state, action) => {
+      if (typeof action.payload === "boolean") {
+        state.isDarkModeActive = action.payload;
+      }
+    },
   },
 });
 
@@ -40,6 +47,7 @@ export const {
   setIsCameraActive,
   setSafeAreaViewEdges,
   resetSafeAreaViewEdges,
+  setIsDarkModeActive,
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

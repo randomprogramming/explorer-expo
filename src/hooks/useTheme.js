@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const DARK_MODE_COLORS = {
   background: {
@@ -50,8 +51,12 @@ const ACCENT = {
   secondary: "#7A8CA9",
 };
 
+//TODO: Figure out a way to only have one global instance of usetheme instead of
+//creating a new object in every component
 const useTheme = () => {
-  const [isDarkModeActive, setIsDarkModeActive] = useState(false);
+  const isDarkModeActive = useSelector(
+    (state) => state.appState.isDarkModeActive
+  );
 
   const [darkModeColors, setDarkModeColors] = useState(DARK_MODE_COLORS);
 

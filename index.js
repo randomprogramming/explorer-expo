@@ -25,9 +25,20 @@ function WithWrapper() {
   const safeAreaViewEdges = useSelector(
     (state) => state.appState.safeAreaViewEdges
   );
+  const isDarkModeActive = useSelector(
+    (state) => state.appState.isDarkModeActive
+  );
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={{
+        dark: isDarkModeActive,
+        colors: {
+          primary: theme.background.primary[0],
+          background: theme.background.primary[0],
+        },
+      }}
+    >
       {/* TODO: Hide status bar when the map screen is open */}
       <StatusBar
         barStyle={isCameraActive ? "light-content" : theme.statusBarStyle}
