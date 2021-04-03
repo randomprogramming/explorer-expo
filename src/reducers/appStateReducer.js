@@ -5,6 +5,7 @@ const initialState = {
   bottomTabBarIconSize: 23,
 
   isCameraActive: false,
+  isMapOpen: false,
   safeAreaViewEdges: ["all"],
 
   isDarkModeActive: false,
@@ -39,6 +40,11 @@ const appStateSlice = createSlice({
         state.isDarkModeActive = action.payload;
       }
     },
+    setIsMapOpen: (state, action) => {
+      if (typeof action.payload === "boolean") {
+        state.isMapOpen = action.payload;
+      }
+    },
   },
 });
 
@@ -48,6 +54,7 @@ export const {
   setSafeAreaViewEdges,
   resetSafeAreaViewEdges,
   setIsDarkModeActive,
+  setIsMapOpen,
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;
