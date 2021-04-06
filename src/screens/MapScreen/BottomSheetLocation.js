@@ -27,7 +27,7 @@ const CustomBackground = ({ style }) => {
         style,
         styles.customBackground,
         {
-          backgroundColor: theme.background.primary[1],
+          backgroundColor: theme.background.primary[0],
         },
       ]}
     />
@@ -44,8 +44,8 @@ const CustomHandle = ({ isLocationSelected }) => {
           styles.customHandle,
           {
             backgroundColor: isLocationSelected
-              ? theme.background.secondary[0]
-              : theme.accent.secondary,
+              ? theme.accent.secondaryShades[0]
+              : theme.accent.secondaryShades[1],
           },
         ]}
       />

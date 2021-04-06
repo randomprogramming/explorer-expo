@@ -46,7 +46,7 @@ const COMMON = {
   red: "#E32636",
 };
 
-const ACCENT = {
+const ACCENT_BASE = {
   primary: "#0F9E80",
   secondary: "#7A8CA9",
 };
@@ -61,6 +61,14 @@ const useTheme = () => {
   const [darkModeColors, setDarkModeColors] = useState(DARK_MODE_COLORS);
 
   const [lightModeColors, setLightModeColors] = useState(LIGHT_MODE_COLORS);
+
+  const ACCENT = {
+    ...ACCENT_BASE,
+    secondaryShades: {
+      0: ACCENT_BASE.secondary + "AA",
+      1: ACCENT_BASE.secondary + "55",
+    },
+  };
 
   return isDarkModeActive
     ? {

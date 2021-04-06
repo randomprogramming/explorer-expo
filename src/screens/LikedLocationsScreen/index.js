@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import {
   View,
-  FlatList,
   Animated,
   RefreshControl,
   Platform,
@@ -16,8 +15,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setSearchValue } from "../../reducers/likedLocationsReducer";
 import { getLikedLocations } from "../../actions/likedLocationsActions";
 import useTheme from "../../hooks/useTheme";
-import Location from "./Location";
 import Icon from "../../components/Icon";
+import LocationFlatList from "../../components/LocationFlatList";
 
 const HEADER_MAX_HEIGHT = 140;
 const HEADER_MIN_HEIGHT = 70;
@@ -125,11 +124,9 @@ const LikedLocationsScreen = () => {
           </View>
         </Animated.View>
       </Animated.View>
-      <FlatList
-        data={filteredLocations}
-        renderItem={(props) => <Location {...props} />}
-        style={styles.flatList}
-        scrollEventThrottle={16}
+      <LocationFlatList
+        locations={filteredLocations}
+        ListEmptyComponent={ListEmptyComponent}
         refreshControl={
           <RefreshControl
             onRefresh={fetchLikedLocations}
@@ -138,14 +135,14 @@ const LikedLocationsScreen = () => {
             progressBackgroundColor={theme.accent.primary}
           />
         }
-        ListEmptyComponent={ListEmptyComponent}
-        contentInset={{ top: Platform.OS === "ios" && HEADER_MAX_HEIGHT - 35 }}
+        contentInset={{ top: Platform.OS === "ios" && HEADER_MAX_HEIGHT - 30 }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: false }
         )}
         contentContainerStyle={{
-          paddingTop: Platform.OS === "android" && HEADER_MAX_HEIGHT,
+          paddingTop:
+            Platform.OS === "ios" ? pxGenerator(8) : HEADER_MAX_HEIGHT,
         }}
       />
     </Container>

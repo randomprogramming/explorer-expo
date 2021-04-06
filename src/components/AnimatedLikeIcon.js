@@ -55,6 +55,8 @@ const AnimatedIcon = ({ size, onPress, isLocationLiked }) => {
           backgroundColor: theme.background.primary[0],
           elevation: elevationInterpolated,
           shadowRadius: shadowInterpolated,
+          borderWidth: 0.5,
+          borderColor: theme.accent.secondaryShades[1],
         },
       ]}
     >

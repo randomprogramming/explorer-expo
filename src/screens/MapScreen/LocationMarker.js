@@ -14,12 +14,14 @@ import getThumbnailFromMedia from "../../helpers/getThumbnailFromMedia";
 import Typography from "../../components/Typography";
 import pxGenerator from "../../helpers/pxGenerator";
 
-const IMAGE_SIZE = 50;
+const IMAGE_SIZE = 65;
 
 const LocationMarker = ({ location, onPress }) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [shouldTrackViewChanges, setShouldTrackViewChanges] = useState(true);
   const theme = useTheme();
+
+  const BORDER_COLOR = theme.accent.secondaryShades[0];
 
   useEffect(() => {
     if (!isImageLoading && shouldTrackViewChanges) {
@@ -63,7 +65,7 @@ const LocationMarker = ({ location, onPress }) => {
             styles.outerImageContainer,
             {
               backgroundColor: theme.background.primary[1],
-              borderColor: theme.accent.secondary,
+              borderColor: BORDER_COLOR,
             },
           ]}
         >
@@ -87,7 +89,7 @@ const LocationMarker = ({ location, onPress }) => {
           </View>
         </View>
         <View style={{ marginTop: -1 }}>
-          <Icon name="markerArrow" size={9} color={theme.accent.secondary} />
+          <Icon name="markerArrow" size={9} color={BORDER_COLOR} />
         </View>
         {/* TODO: Add small shadow under the marker */}
       </View>

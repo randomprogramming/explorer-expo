@@ -23,7 +23,6 @@ export default StyleSheet.create({
   searchBarContainer: {
     marginTop: pxGenerator(1.5),
   },
-  flatList: { flex: 1 },
   centeredText: { textAlignVertical: "center", textAlign: "center" },
   listEmptyComponentMain: {
     flex: 1,

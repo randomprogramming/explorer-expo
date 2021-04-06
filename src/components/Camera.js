@@ -18,6 +18,8 @@ import useTheme from "../hooks/useTheme";
 import pxGenerator from "../helpers/pxGenerator";
 import PropTypes from "prop-types";
 import Icon from "./Icon";
+import GestureRecognizer from "react-native-swipe-gestures";
+import * as ImagePicker from "expo-image-picker";
 
 const CANCEL_TEXT_SIZE = 20;
 const TAKE_PICTURE_BUTTON_SIZE = 60;
@@ -62,6 +64,18 @@ const CameraComponent = ({
     setHasCameraPermission(status === "granted");
   }
 
+  async function pickImage() {
+    let photo = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      allowsMultipleSelection: true,
+    });
+
+    if (!photo.cancelled) {
+      onPictureTaken(photo);
+    }
+  }
+
   useEffect(() => {
     (async () => {
       const cameraPerm = await Permissions.getAsync(Permissions.CAMERA);
@@ -99,48 +113,49 @@ const CameraComponent = ({
 
   return (
     <View style={[styles.main, { backgroundColor: theme.common.black }]}>
-      <Camera
-        style={styles.camera}
-        ref={cameraRef}
-        onCameraReady={() => setIsCameraReady(true)}
-        type={
-          useBackCamera
-            ? Camera.Constants.Type.back
-            : Camera.Constants.Type.front
-        }
-        flashMode={
-          useFlash
-            ? Camera.Constants.FlashMode.on
-            : Camera.Constants.FlashMode.off
-        }
-      >
-        <View style={styles.topButtonsContainer}>
-          <View>
-            {onBackButtonPress && (
-              <Pressable onPress={onBackButtonPress} hitSlop={16}>
-                <Icon
-                  name="back"
-                  size={CANCEL_TEXT_SIZE + 4}
+      <GestureRecognizer onSwipeUp={pickImage} style={{ flex: 1 }}>
+        <Camera
+          style={styles.camera}
+          ref={cameraRef}
+          onCameraReady={() => setIsCameraReady(true)}
+          type={
+            useBackCamera
+              ? Camera.Constants.Type.back
+              : Camera.Constants.Type.front
+          }
+          flashMode={
+            useFlash
+              ? Camera.Constants.FlashMode.on
+              : Camera.Constants.FlashMode.off
+          }
+        >
+          <View style={styles.topButtonsContainer}>
+            <View>
+              {onBackButtonPress && (
+                <Pressable onPress={onBackButtonPress} hitSlop={16}>
+                  <Icon
+                    name="back"
+                    size={CANCEL_TEXT_SIZE + 4}
+                    color={theme.common.white}
+                  />
+                </Pressable>
+              )}
+            </View>
+            {onCancelPress && (
+              <Pressable onPress={onCancelPress} hitSlop={16}>
+                <Typography
+                  fontSize={CANCEL_TEXT_SIZE}
                   color={theme.common.white}
-                />
+                >
+                  Cancel
+                </Typography>
               </Pressable>
             )}
           </View>
-          {onCancelPress && (
-            <Pressable onPress={onCancelPress} hitSlop={16}>
-              <Typography
-                fontSize={CANCEL_TEXT_SIZE}
-                color={theme.common.white}
-              >
-                Cancel
-              </Typography>
-            </Pressable>
-          )}
-        </View>
-        <View style={{ flex: 1 }}>
           {/* Just a placeholder to create space for the actual camera */}
-        </View>
-      </Camera>
+          <View style={{ flex: 1 }} />
+        </Camera>
+      </GestureRecognizer>
       <View style={styles.bottomBarContainer}>
         <View
           style={[
