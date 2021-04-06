@@ -69,7 +69,7 @@ const LocationMarker = ({ location, onPress }) => {
         >
           <View style={styles.innerImageContainer}>
             <Image
-              source={{ uri: getThumbnailFromMedia(location.media).url }}
+              source={{ uri: getThumbnailFromMedia(location.media) }}
               style={styles.image}
               onLoadStart={() => setIsImageLoading(true)}
               onLoadEnd={() => setIsImageLoading(false)}

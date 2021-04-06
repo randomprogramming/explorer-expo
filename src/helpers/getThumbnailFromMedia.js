@@ -1,6 +1,6 @@
 export default function getThumbnailFromMedia(mediaArr) {
   for (const media of mediaArr) {
-    if (media.isThumbnail) return media;
+    if (media.thumbnail) return media.url;
   }
-  return mediaArr[0];
+  return mediaArr[0].url;
 }

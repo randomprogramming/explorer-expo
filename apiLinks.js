@@ -1,4 +1,4 @@
-const SERVER_URL = "http://192.168.1.106:8080";
+const SERVER_URL = "http://192.168.1.103:8080";
 
 export const LOGIN_URL = SERVER_URL + "/api/login";
 export const REGISTER_URL = SERVER_URL + "/api/register";
