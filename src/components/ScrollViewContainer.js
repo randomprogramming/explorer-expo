@@ -37,7 +37,10 @@ const ScrollViewContainer = ({
       ]}
       behavior={getBehavior()}
     >
-      <ScrollView contentContainerStyle={styles.flexGrow}>
+      <ScrollView
+        contentContainerStyle={styles.flexGrow}
+        refreshControl={refreshControl}
+      >
         <Container
           defaultPadding={defaultPadding}
           headerTitle={headerTitle}

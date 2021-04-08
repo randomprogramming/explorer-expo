@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import addLocationReducer from "./addLocationReducer";
 import appStateReducer from "./appStateReducer";
 import likedLocationsReducer from "./likedLocationsReducer";
+import locationSearchReducer from "./locationSearchReducer";
 import mapReducer from "./mapReducer";
 import personReducer from "./personReducer";
 import registrationDataReducer from "./registrationDataReducer";
@@ -13,4 +14,5 @@ export default combineReducers({
   registrationData: registrationDataReducer,
   likedLocations: likedLocationsReducer,
   map: mapReducer,
+  locationSearch: locationSearchReducer,
 });

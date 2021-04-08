@@ -8,7 +8,13 @@ import PropTypes from "prop-types";
 import DelayedInput from "react-native-debounce-input";
 import { SEMI_BOLD_FF } from "./Typography";
 
-const SearchBar = ({ value, onChange, placeholder }) => {
+const SearchBar = ({
+  value,
+  onChange,
+  placeholder,
+  delayTimeout = 600,
+  minLength = 0,
+}) => {
   const theme = useTheme();
 
   return (
@@ -26,11 +32,14 @@ const SearchBar = ({ value, onChange, placeholder }) => {
         placeholderTextColor={theme.accent.secondaryShades[0]}
         value={value}
         onChangeText={onChange}
-        delayTimeout={600}
-        minLength={0}
+        delayTimeout={delayTimeout}
+        minLength={minLength}
         style={[
           styles.textInput,
-          { backgroundColor: theme.background.primary[1] },
+          {
+            backgroundColor: theme.background.primary[1],
+            color: theme.text.primary,
+          },
         ]}
       />
     </View>
@@ -43,6 +52,8 @@ SearchBar.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
+  delayTimeout: PropTypes.number,
+  minLength: PropTypes.number,
 };
 
 const styles = StyleSheet.create({

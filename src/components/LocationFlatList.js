@@ -14,7 +14,7 @@ import Swiper from "react-native-swiper";
 
 const IMAGE_SIZE = Dimensions.get("screen").width;
 
-const Location = ({ item }) => {
+export const Location = ({ item }) => {
   const { id, title, media } = item;
 
   const theme = useTheme();

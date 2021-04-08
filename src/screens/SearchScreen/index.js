@@ -1,62 +1,53 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { Button, View, TouchableOpacity } from "react-native";
-import { MARK_LOCATION_AS_LIKED } from "../../../apiLinks";
+import React, { useEffect } from "react";
+import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import SearchBar from "../../components/SearchBar";
 import Typography from "../../components/Typography";
 import styles from "./styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import Container from "../../components/Container";
+import { fetchLocationsWithQuery } from "../../actions/locationSearchActions";
+import { clearLocations } from "../../reducers/locationSearchReducer";
+import { Location } from "../../components/LocationFlatList";
 
 const SearchScreen = () => {
-  const [searchValue, setSearchValue] = useState();
-  const [locations, setLocations] = useState([]);
-  const token = useSelector((state) => state.person.token);
+  const locations = useSelector((state) => state.locationSearch.locations);
 
-  function handleSearch() {
-    console.log(searchValue);
-    axios({
-      method: "GET",
-      url: "http://192.168.1.106:8080/api/location",
-      params: {
-        searchQuery: searchValue,
-      },
-    })
-      .then((res) => setLocations(res.data.content))
-      .catch((err) => console.log("error", err));
+  const dispatch = useDispatch();
+
+  function handleSearchChange(newVal) {
+    dispatch(fetchLocationsWithQuery(newVal));
   }
 
-  function handleLocationLike(locationId) {
-    axios({
-      method: "GET",
-      url: MARK_LOCATION_AS_LIKED(locationId),
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log("error", err));
-  }
+  useEffect(() => {
+    return () => {
+      dispatch(clearLocations());
+    };
+  }, []);
 
   return (
-    <View>
-      <Typography>Search screen</Typography>
-      <SearchBar
-        value={searchValue}
-        onChange={(newVal) => setSearchValue(newVal)}
-      />
-      <Button onPress={handleSearch} title="search" />
-      {locations.map((location) => {
-        return (
-          <TouchableOpacity
-            key={location.id}
-            style={{ height: 200, margin: 20, backgroundColor: "#f8f6f6" }}
-            onPress={() => handleLocationLike(location.id)}
-          >
-            <Typography>{location.title}</Typography>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+    <Container>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.select({ ios: "padding" })}
+      >
+        <ScrollView style={styles.scrollView} stickyHeaderIndices={[1]}>
+          <View style={[styles.paddingHorizontal, styles.topMargin]}>
+            <Typography variant="h1">Search for locations</Typography>
+          </View>
+          <View style={[styles.paddingHorizontal, styles.paddingVertical]}>
+            <SearchBar
+              onChange={handleSearchChange}
+              delayTimeout={700}
+              minLength={3}
+              placeholder="Hillside walk"
+            />
+          </View>
+          {locations.map((item) => (
+            <Location key={item.id} item={item} />
+          ))}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </Container>
   );
 };
 
