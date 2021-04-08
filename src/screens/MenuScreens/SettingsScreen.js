@@ -21,11 +21,13 @@ const SwitchMenuItem = ({ name, value, onValueChange, icon: Icon }) => {
       <Switch
         value={value}
         onValueChange={onValueChange}
-        // Style only on android, depending if the value is true or not
         thumbColor={
-          Platform.OS === "android" && value
-            ? theme.accent.primary
-            : theme.background.primary[1]
+          value
+            ? Platform.select({
+                android: theme.accent.primary,
+                ios: theme.common.white,
+              })
+            : theme.common.white
         }
       />
     </View>

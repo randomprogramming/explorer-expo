@@ -25,7 +25,7 @@ const BigButton = ({ onPress, title, disabled, style, isSmall }) => {
       onPress={onPress}
       disabled={disabled}
     >
-      <Typography fontWeight="semi-bold" color="secondary">
+      <Typography fontWeight="semi-bold" color={theme.common.white}>
         {title}
       </Typography>
     </TouchableOpacity>

@@ -15,8 +15,8 @@ const DARK_MODE_COLORS = {
     },
   },
   text: {
-    primary: "#ECECEC",
-    secondary: "#040404",
+    primary: "#F8F6F6",
+    secondary: "#080808",
   },
 };
 
@@ -40,7 +40,7 @@ const LIGHT_MODE_COLORS = {
 };
 
 const COMMON = {
-  white: "#FFFFFF",
+  white: "#F8F6F6",
   black: "#080808",
   orange: "#FFA500",
   red: "#E32636",

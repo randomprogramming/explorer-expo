@@ -88,10 +88,6 @@ const LocationMarker = ({ location, onPress }) => {
             )}
           </View>
         </View>
-        <View style={{ marginTop: -1 }}>
-          <Icon name="markerArrow" size={9} color={BORDER_COLOR} />
-        </View>
-        {/* TODO: Add small shadow under the marker */}
       </View>
     </Marker>
   );
@@ -137,7 +133,7 @@ const styles = StyleSheet.create({
     zIndex: 111,
     // You cant draw outside the parent view in android from what i understand, while
     // this works completely fine on ios
-    right: Platform.select({ ios: -pxGenerator(2), android: 0 }),
+    right: Platform.select({ ios: -pxGenerator(1), android: 0 }),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

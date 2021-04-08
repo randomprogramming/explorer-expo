@@ -1,6 +1,6 @@
 import { useIsFocused } from "@react-navigation/core";
 import React, { useEffect, useRef, useState } from "react";
-import MapView from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import styles from "./styles";
 import { useDispatch } from "react-redux";
 import {
@@ -13,7 +13,7 @@ import { getLocationsForRegion } from "../../actions/mapActions";
 import BottomSheetLocation from "./BottomSheetLocation";
 import { setSelectedLocation } from "../../reducers/mapReducer";
 
-const SNAP_POINTS = ["7%", "40%", "70%"];
+const SNAP_POINTS = ["7%", "40%", "75%"];
 
 const MapScreen = () => {
   const sheetRef = useRef(null);
@@ -60,6 +60,7 @@ const MapScreen = () => {
   return (
     <>
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={styles.map}
         onRegionChangeComplete={handleRegionChange}
         showsUserLocation={isFocused}
